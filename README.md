@@ -7,8 +7,8 @@
 5. When you are done developing, run `npm run build`. This will minify your CSS and JS and make it production-ready.
 
 ### CSS
-- import external CSS[postcss-import](https://github.com/postcss/postcss-import)
-- use SCSS-like features [precss](https://github.com/jonathantneal/precss)
+- [postcss-import](https://github.com/postcss/postcss-import) lets you import css easily (including from node_modules)
+- [precss](https://github.com/jonathantneal/precss) lets you use SCSS-like features
 - let [autoprefixer](https://github.com/postcss/autoprefixer) take care of browser prefixes
 - avoid nesting
 - avoid `important!`
