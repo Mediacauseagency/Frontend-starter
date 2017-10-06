@@ -1,0 +1,42 @@
+{
+  "name": "Frontend-starter",
+  "version": "0.0.1",
+  "descrpition": "Frontend-starter",
+  "main": "js/index.js",
+  "config": {
+    "js-source" : "../public/wp-content/themes/MY_THEME/build.js",
+    "css-source" : "../public/wp-content/themes/MY_THEME/style.min.css"
+  },
+  "scripts": {
+    "demo-js": "watchify -v -t babelify demo/index.js -o demo/build.js",
+    "demo-css": "postcss demo/index.css -u postcss-import postcss-each postcss-cssnext postcss-for -o demo/build.css -w",
+    "demo": "open demo/index.html && concurrently \"npm run demo-css\" \"npm run demo-js\"",
+    "watch-js": "watchify -v -t babelify js/index.js -o $npm_package_config_js-source",
+    "build-js": "browserify -v -t babelify js/index.js | uglifyjs > $npm_package_config_js-source",
+    "watch-css": "postcss css/index.css -u postcss-import postcss-each postcss-cssnext postcss-for -o $npm_package_config_css-source -w",
+    "build-css": "postcss css/index.css -u postcss-import  postcss-cssnext postcss-for postcss-each cssnano -o $npm_package_config_css-source",
+    "build": "npm install && npm run build-js && npm run build-css",
+    "watch": "npm install && concurrently \"npm run watch-js\" \"npm run watch-css\""
+  },
+  "author": "Yutaka Houlette <yutakahoulette@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^7.3.0",
+    "browserify": "^14.4.0",
+    "concurrently": "^3.5.0",
+    "cssnano": "^3.10.0",
+    "normalize.css": "^7.0.0",
+    "postcss": "^6.0.11",
+    "postcss-each": "^0.10.0",
+    "postcss-for": "^2.1.1",
+    "postcss-cli": "^4.1.1",
+    "postcss-cssnext": "^3.0.2",
+    "postcss-import": "^11.0.0",
+    "uglify": "^0.1.5",
+    "watchify": "^3.9.0"
+  },
+  "devDependencies": {
+    "postcss-at-rules-variables": "^0.1.1"
+  }
+}
