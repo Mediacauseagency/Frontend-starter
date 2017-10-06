@@ -7,10 +7,9 @@
 5. When you are done developing, run `npm run build`. This will minify your CSS and JS and make it production-ready.
 
 ### CSS
-- we are using [cssnext](http://cssnext.io/features/)
-- you can import external CSS with [postcss-import](https://github.com/postcss/postcss-import)
-- you can use @each with [postcss-each](https://github.com/postcss/postcss-each)
-- and @for with [postcss-for](https://github.com/postcss/postcss-for)
+- import external CSS[postcss-import](https://github.com/postcss/postcss-import)
+- use SCSS-like features [precss](https://github.com/jonathantneal/precss)
+- let [autoprefixer](https://github.com/postcss/autoprefixer) take care of browser prefixes
 - avoid nesting
 - avoid `important!`
 - use `rem`s or `em`s over pixels possible
