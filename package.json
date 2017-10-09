@@ -4,17 +4,17 @@
   "descrpition": "Frontend-starter",
   "main": "js/index.js",
   "config": {
-    "js-source": "../public/wp-content/themes/MY_THEME/build.js",
-    "css-source": "../public/wp-content/themes/MY_THEME/style.min.css"
+    "jsSource": "../build.js",
+    "cssSource": "../build.css"
   },
   "scripts": {
     "demo-js": "watchify -v -t babelify demo/index.js -o demo/build.js",
-    "demo-css": "postcss demo/index.css -u postcss-import precss autoprefixer -o demo/build.css -w",
+    "demo-css": "postcss demo/index.css -c postcss.config.js -o demo/build.css",
     "demo": "open demo/index.html && concurrently \"npm run demo-css\" \"npm run demo-js\"",
-    "watch-js": "watchify -v -t babelify js/index.js -o $npm_package_config_js-source",
-    "build-js": "browserify -v -t babelify js/index.js | uglifyjs > $npm_package_config_js-source",
-    "watch-css": "postcss css/index.css -u postcss-import precss autoprefixer -o $npm_package_config_css-source -w",
-    "build-css": "postcss css/index.css -u postcss-import precss autoprefixer cssnano -o $npm_package_config_css-source",
+    "watch-js": "watchify -v -t babelify js/index.js -o $npm_package_config_jsSource",
+    "build-js": "browserify -v -t babelify js/index.js | uglifyjs > $npm_package_config_jsSource && gzip -c -9 < $npm_package_config_jsSource > $npm_package_config_jsSource.gz",
+    "watch-css": "postcss css/index.css -c postcss.config.js -o $npm_package_config_cssSource -w",
+    "build-css": "postcss css/index.css -c postcss.config.js --env 'production' -o $npm_package_config_cssSource && gzip -c -9 < $npm_package_config_cssSource > $npm_package_config_cssSource.gz",
     "build": "npm install && npm run build-js && npm run build-css",
     "watch": "npm install && concurrently \"npm run watch-js\" \"npm run watch-css\""
   },
@@ -29,11 +29,8 @@
     "cssnano": "^3.10.0",
     "normalize.css": "^7.0.0",
     "postcss": "^6.0.11",
-    "postcss-advanced-variables": "^1.2.2",
+    "postcss-assets": "^5.0.0",
     "postcss-cli": "^4.1.1",
-    "postcss-cssnext": "^3.0.2",
-    "postcss-each": "^0.10.0",
-    "postcss-for": "^2.1.1",
     "postcss-import": "^11.0.0",
     "precss": "^2.0.0",
     "uglify": "^0.1.5",
