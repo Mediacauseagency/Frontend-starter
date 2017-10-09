@@ -10,7 +10,7 @@
   "scripts": {
     "demo-js": "watchify -v -t babelify demo/index.js -o demo/build.js",
     "demo-css": "postcss demo/index.css -c postcss.config.js -o demo/build.css",
-    "demo": "open demo/index.html && concurrently \"npm run demo-css\" \"npm run demo-js\"",
+    "demo": "open demo/index.html && concurrently \"npm run demo-css\" \"npm run demo-js\" -w",
     "watch-js": "watchify -v -t babelify js/index.js -o $npm_package_config_jsSource",
     "build-js": "browserify -v -t babelify js/index.js | uglifyjs > $npm_package_config_jsSource && gzip -c -9 < $npm_package_config_jsSource > $npm_package_config_jsSource.gz",
     "watch-css": "postcss css/index.css -c postcss.config.js -o $npm_package_config_cssSource -w",
@@ -30,9 +30,13 @@
     "normalize.css": "^7.0.0",
     "postcss": "^6.0.11",
     "postcss-assets": "^5.0.0",
+    "postcss-at-rules-variables": "^0.1.1",
     "postcss-cli": "^4.1.1",
+    "postcss-conditionals": "^2.1.0",
+    "postcss-cssnext": "^3.0.2",
+    "postcss-each": "^0.10.0",
+    "postcss-for": "^2.1.1",
     "postcss-import": "^11.0.0",
-    "precss": "^2.0.0",
     "uglify": "^0.1.5",
     "watchify": "^3.9.0"
   }
