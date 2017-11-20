@@ -3,8 +3,8 @@ vagrantfile:
     vm:
         provider:
             local:
-                box: puphpet/ubuntu1404-x64
-                box_url: puphpet/ubuntu1404-x64
+                box: puphpet/ubuntu1604-x64
+                box_url: 'false'
                 box_version: '0'
                 chosen_virtualizer: virtualbox
                 virtualizers:
@@ -19,16 +19,16 @@ vagrantfile:
                         check_guest_tools: 0
                         update_guest_tools: 0
                 machines:
-                    vflm_1u6kagw34msp:
-                        id: futuresqic
-                        hostname: futuresqic
+                    vflm_mxn6u2t3yvee:
+                        id:
+                        hostname:
                         network:
                             private_network: 192.168.56.101
                             forwarded_port:
-                                vflmnfp_mde4y1yhxmw7:
-                                    host: '9553'
+                                vflmnfp_slyb52jciv1x:
+                                    host: '6203'
                                     guest: '22'
-                                vflmnfp_9s6j2pj26iav:
+                                vflmnfp_peyprvc09jf2:
                                     host: '8080'
                                     guest: '80'
                         memory: '512'
@@ -43,8 +43,10 @@ vagrantfile:
                     - '--verbose'
                     - '--hiera_config /vagrant/puphpet/puppet/hiera.yaml'
         synced_folder:
-            vflsf_8qr4xy8vdr1a:
-                source: ./build/public
+            vflsf_rgymmpoo1jd3:
+                owner: www-data
+                group: www-data
+                source: ./html
                 target: /var/www
                 sync_type: default
                 smb:
@@ -63,8 +65,6 @@ vagrantfile:
                         - .vagrant/
                         - .git/
                     auto: 'true'
-                owner: www-data
-                group: www-data
         usable_port_range:
             start: 10200
             stop: 10500
@@ -89,7 +89,9 @@ vagrantfile:
         no_proxy: ''
 server:
     install: '1'
-    packages: {  }
+    packages:
+        - vim
+        - htop
 users_groups:
     install: '1'
     groups: {  }
@@ -101,10 +103,17 @@ locale:
         locales:
             - en_GB.UTF-8
             - en_US.UTF-8
-        timezone: America/New_York
+        timezone: UTC
 firewall:
     install: '1'
     rules: {  }
+resolv:
+    install: '1'
+    nameservers:
+        - 8.8.8.8
+        - 8.8.4.4
+    domainname: ''
+    searchpath: {  }
 cron:
     install: '1'
     jobs: {  }
@@ -121,7 +130,7 @@ nginx:
         names_hash_bucket_size: 128
     upstreams: {  }
     vhosts:
-        nxv_9nojniarjfp2:
+        nxv_allhfjp5nu4w:
             server_name: awesome.dev
             server_aliases:
                 - www.awesome.dev
@@ -129,33 +138,50 @@ nginx:
             listen_port: '80'
             client_max_body_size: 1m
             ssl: '0'
-            ssl_cert: ''
-            ssl_key: ''
-            ssl_port: '443'
-            ssl_protocols: ''
-            ssl_ciphers: ''
-            rewrite_to_https: '1'
-            spdy: '1'
             locations:
-                nxvl_hnh6rog002d5:
-                    www_root: ''
+                nxvl_brub61zufehe:
+                    www_root: /var/www/awesome/web
                     location: /
+                    autoindex: 'off'
+                    internal: 'false'
                     index_files:
                         - index.html
-                        - index.htm
                         - index.php
+                        - app.php
                     try_files:
                         - $uri
                         - $uri/
                         - /index.php$is_args$args
+                        - /app.php$is_args$args
                     fastcgi: ''
                     fastcgi_index: ''
                     fastcgi_split_path: ''
                     proxy: ''
                     proxy_redirect: ''
-                nxvl_mttitsbf5h6g:
-                    www_root: ''
-                    location: '~ \.php$'
+                nxvl_bgxen3vrvd9z:
+                    www_root: /var/www/awesome/web
+                    location: '~ ^/(app_dev|config)\.php(/|$)'
+                    autoindex: 'off'
+                    internal: 'false'
+                    try_files:
+                        - $uri
+                        - $uri/
+                        - /app_dev.php$is_args$args
+                    fastcgi: '127.0.0.1:9000'
+                    fastcgi_index: app_dev.php
+                    fastcgi_split_path: '^(.+\.php)(/.*)$'
+                    fast_cgi_params_extra:
+                        - 'SCRIPT_FILENAME $document_root$fastcgi_script_name'
+                        - 'APP_ENV dev'
+                    set:
+                        - '$path_info $fastcgi_path_info'
+                    proxy: ''
+                    proxy_redirect: ''
+                nxvl_ddrlmjv24tbu:
+                    www_root: /var/www/awesome/web
+                    location: '~ ^/index\.php(/|$)'
+                    autoindex: 'off'
+                    internal: 'false'
                     try_files:
                         - $uri
                         - $uri/
@@ -164,8 +190,26 @@ nginx:
                     fastcgi_index: index.php
                     fastcgi_split_path: '^(.+\.php)(/.*)$'
                     fast_cgi_params_extra:
-                        - 'SCRIPT_FILENAME $request_filename'
-                        - 'APP_ENV dev'
+                        - 'SCRIPT_FILENAME $document_root$fastcgi_script_name'
+                    set:
+                        - '$path_info $fastcgi_path_info'
+                    proxy: ''
+                    proxy_redirect: ''
+                nxvl_uv0vaegrnve8:
+                    www_root: /var/www/awesome/web
+                    location: '~ ^/app\.php(/|$)'
+                    autoindex: 'off'
+                    internal: 'false'
+                    try_files:
+                        - $uri
+                        - $uri/
+                        - /app.php$is_args$args
+                    fastcgi: '127.0.0.1:9000'
+                    fastcgi_index: app.php
+                    fastcgi_split_path: '^(.+\.php)(/.*)$'
+                    fast_cgi_params_extra:
+                        - 'SCRIPT_FILENAME $document_root$fastcgi_script_name'
+                        - 'APP_ENV prod'
                     set:
                         - '$path_info $fastcgi_path_info'
                     proxy: ''
@@ -185,25 +229,24 @@ apache:
         - proxy_fcgi
         - rewrite
     vhosts:
-        av_clljs44zdt04:
+        av_ppp7nzeldsnd:
             servername: localhost
             docroot: /var/www/
             port: '80'
-            setenv:
-                - 'APP_ENV dev'
             setenvif:
                 - 'Authorization "(.*)" HTTP_AUTHORIZATION=$1'
             custom_fragment: ''
             ssl: '0'
-            ssl_cert: ''
-            ssl_key: ''
-            ssl_chain: ''
-            ssl_certs_dir: ''
+            ssl_cert: LETSENCRYPT
+            ssl_key: LETSENCRYPT
+            ssl_chain: LETSENCRYPT
+            ssl_certs_dir: LETSENCRYPT
             ssl_protocol: ''
             ssl_cipher: ''
             directories:
-                avd_4drcmuac5e8e:
+                avd_y1028wg31lfy:
                     path: /var/www/
+                    directoryindex: 'index.php app.dev'
                     options:
                         - Indexes
                         - FollowSymlinks
@@ -213,22 +256,37 @@ apache:
                     require:
                         - 'all granted'
                     custom_fragment: ''
-                    files_match:
-                        avdfm_9hk6p27uqxdi:
-                            path: \.php$
-                            sethandler: 'proxy:fcgi://127.0.0.1:9000'
-                            custom_fragment: ''
-                            provider: filesmatch
                     provider: directory
+            files_match:
+                avfm_nc90bgfz91v0:
+                    path: (app_dev|config)\.php$
+                    sethandler: 'proxy:fcgi://127.0.0.1:9000'
+                    setenv:
+                        - 'APP_ENV dev'
+                    custom_fragment: ''
+                    provider: filesmatch
+                avfm_7wpuxk0vvwop:
+                    path: app\.php$
+                    sethandler: 'proxy:fcgi://127.0.0.1:9000'
+                    setenv:
+                        - 'APP_ENV prod'
+                    custom_fragment: ''
+                    provider: filesmatch
+                avfm_59d3vm71idjb:
+                    path: \.php$
+                    sethandler: 'proxy:fcgi://127.0.0.1:9000'
+                    custom_fragment: ''
+                    provider: filesmatch
 letsencrypt:
     install: '1'
     settings:
         email: ''
+        webserver_service: ''
     domains: {  }
 php:
     install: '1'
     settings:
-        version: '7.0'
+        version: '7.1'
     modules:
         php:
             - cli
@@ -240,6 +298,7 @@ php:
             - memcache
             - memcached
             - mcrypt
+            - sendmail
         pear: {  }
         pecl: {  }
     ini:
@@ -250,7 +309,7 @@ php:
     fpm_ini:
         error_log: /var/log/php-fpm.log
     fpm_pools:
-        phpfp_c0c6ywdhwp0k:
+        phpfp_8ps6enyna5l2:
             ini:
                 prefix: www
                 listen: '127.0.0.1:9000'
@@ -286,76 +345,66 @@ xhprof:
     install: '0'
 wpcli:
     install: '1'
-    version: v0.24.1
+    version: v1.1.0
 drush:
     install: '0'
     version: 8.0.5
 ruby:
     install: '1'
-    versions: {  }
+    versions:
+        rv_c8rmh0tkrtz4:
+            default: '1'
+            bundler: '1'
+            version: 2.3.1
+            gems:
+                - deep_merge@1.0.1
+                - activesupport@4.2.6
+                - vine@0.2
 python:
     install: '1'
     packages: {  }
     versions: {  }
 nodejs:
-    install: '1'
+    install: '0'
     settings:
         version: '6'
-    npm_packages:
-        - grunt
-hhvm:
-    install: '0'
-    composer: '1'
-    composer_home: ''
-    settings: {  }
-    server_ini:
-        hhvm.server.host: 127.0.0.1
-        hhvm.server.port: '9000'
-        hhvm.log.use_log_file: '1'
-        hhvm.log.file: /var/log/hhvm/error.log
-    php_ini:
-        display_errors: 'On'
-        error_reporting: '-1'
-        date.timezone: UTC
+    npm_packages: {  }
 mariadb:
     install: '1'
     settings:
         version: '10.1'
-        root_password: '123'
+        root_password: root
         override_options: {  }
-    adminer: 0
     users:
-        mariadbnu_edzylh63iclb:
+        mariadbnu_vlfhqe1ymffq:
             name: dbuser
             password: root
     databases:
-        mariadbnd_rgve2udbx8hq:
+        mariadbnd_s1xuo4g9khdy:
             name: website
             sql: ''
     grants:
-        mariadbng_12zex62prq3h:
+        mariadbng_iiwcegj4c1j5:
             user: dbuser
             table: '*.*'
             privileges:
                 - ALL
-
 mysql:
     install: '0'
     settings:
         version: '5.7'
         root_password: '123'
         override_options: {  }
-    adminer: 0
     users:
-        mysqlnu_z92c2oi2lj6o:
+        mysqlnu_9edaiyidjfj6:
             name: dbuser
             password: '123'
     databases:
-        mysqlnd_ggeaz4mkx7k4:
+        mysqlnd_j9msjesjwin8:
             name: dbname
             sql: ''
     grants:
-        mysqlng_0keqnesbt89n:
+        mysqlng_yrze1pb246al:
             user: dbuser
             table: '*.*'
             privileges:
@@ -371,7 +420,6 @@ postgresql:
     databases: {  }
     users: {  }
     grants: {  }
-    adminer: 0
 mongodb:
     install: '0'
     settings:
@@ -386,7 +434,6 @@ redis:
         port: '6379'
 sqlite:
     install: '0'
-    adminer: 0
     databases: {  }
 mailhog:
     install: '0'
@@ -420,7 +467,7 @@ elastic_search:
         version: 2.3.1
         java_install: true
     instances:
-        esi_o6xqje4meljz:
+        esi_wd2xe1jv3pwp:
             name: es-01
 solr:
     install: '0'
