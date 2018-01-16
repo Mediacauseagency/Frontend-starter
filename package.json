@@ -1,33 +1,25 @@
 {
   "name": "Frontend-starter",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "descrpition": "Frontend-starter",
   "main": "js/index.js",
-  "config": {
-    "jsSource": "../build.js",
-    "cssSource": "../build.css"
-  },
   "scripts": {
-    "demo-js": "watchify -v -t babelify demo/index.js -o demo/build.js",
-    "demo-css": "postcss demo/index.css -c postcss.config.js -o demo/build.css",
-    "demo": "open demo/index.html && concurrently \"npm run demo-css\" \"npm run demo-js\" -w",
-    "watch-js": "watchify -v -t babelify js/index.js -o $npm_package_config_jsSource",
-    "build-js": "browserify -v -t babelify js/index.js | uglifyjs > $npm_package_config_jsSource && gzip -c -9 < $npm_package_config_jsSource > $npm_package_config_jsSource.gz",
-    "watch-css": "postcss css/index.css -c postcss.config.js -o $npm_package_config_cssSource -w",
-    "build-css": "postcss css/index.css -c postcss.config.js --env 'production' -o $npm_package_config_cssSource && gzip -c -9 < $npm_package_config_cssSource > $npm_package_config_cssSource.gz",
-    "build": "npm install && npm run build-js && npm run build-css",
-    "watch": "npm install && concurrently \"npm run watch-js\" \"npm run watch-css\""
+    "watch-js": "watchify -v -t babelify js/index.js -o ./build.js",
+    "watch-css": "postcss css/index.css -c postcss.config.js -o ./build.css -w",
+    "watch": "concurrently \"npm run watch-css\" \"npm run watch-js\"",
+    "build-js": "browserify -t babelify -t uglifyify -p common-shakeify js/index.js | uglifyjs -c -m > ./build.js && gzip -c -9 < ./build.js > ./build.js.gz",
+    "build-css": "postcss css/index.css -c postcss.config.js --env 'production' -o ./build.css && gzip -c -9 < ./build.css > ./build.css.gz",
+    "build": "npm install && npm run build-js && npm run build-css"
   },
   "author": "Yutaka Houlette <yutakahoulette@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "autoprefixer": "^7.1.5",
     "babel-preset-es2015": "^6.24.1",
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
+    "common-shakeify": "^0.4.5",
     "concurrently": "^3.5.0",
     "cssnano": "^3.10.0",
-    "normalize.css": "^7.0.0",
     "postcss": "^6.0.11",
     "postcss-assets": "^5.0.0",
     "postcss-at-rules-variables": "^0.1.1",
@@ -35,9 +27,11 @@
     "postcss-conditionals": "^2.1.0",
     "postcss-cssnext": "^3.0.2",
     "postcss-each": "^0.10.0",
+    "postcss-easy-import": "^3.0.0",
     "postcss-for": "^2.1.1",
-    "postcss-import": "^11.0.0",
-    "uglify": "^0.1.5",
+    "tachyons": "^4.9.1",
+    "uglifyify": "^4.0.5",
+    "uglifyjs": "^2.4.11",
     "watchify": "^3.9.0"
   }
 }
