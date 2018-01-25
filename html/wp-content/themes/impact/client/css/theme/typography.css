@@ -1,0 +1,22 @@
+/* replace font families below with your project's font families */
+/* font families should live in impact/assets/fonts */
+
+:root {
+  --sans: Poppins, Helvetica Neue, Helvetica, Arial, sans-serif;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src:  url('./fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src:  url('./fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+body { font-family: var(--sans); }

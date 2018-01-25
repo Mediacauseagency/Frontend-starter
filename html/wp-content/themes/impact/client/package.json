@@ -4,11 +4,11 @@
   "descrpition": "Frontend-starter",
   "main": "js/index.js",
   "scripts": {
-    "watch-js": "watchify -v -t babelify js/index.js -o ./build.js",
-    "watch-css": "postcss css/index.css -c postcss.config.js -o ./build.css -w",
+    "watch-js": "watchify -v -t babelify js/index.js -o ../assets/build.js",
+    "watch-css": "postcss css/index.css -c postcss.config.js -o ../assets/build.css -w",
     "watch": "concurrently \"npm run watch-css\" \"npm run watch-js\"",
-    "build-js": "browserify -t babelify -t uglifyify -p common-shakeify js/index.js | uglifyjs -c -m > ./build.js && gzip -c -9 < ./build.js > ./build.js.gz",
-    "build-css": "postcss css/index.css -c postcss.config.js --env 'production' -o ./build.css && gzip -c -9 < ./build.css > ./build.css.gz",
+    "build-js": "browserify -t babelify -t uglifyify -p common-shakeify js/index.js | uglifyjs -c -m > ../assets/build.js && gzip -c -9 < ../assets/build.js > ../assets/build.js.gz",
+    "build-css": "postcss css/index.css -c postcss.config.js --env 'production' -o ../assets/build.css && gzip -c -9 < ../assets/build.css > ../assets/build.css.gz",
     "build": "npm install && npm run build-js && npm run build-css"
   },
   "author": "Yutaka Houlette <yutakahoulette@gmail.com>",

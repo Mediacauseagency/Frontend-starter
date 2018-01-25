@@ -1,0 +1,15 @@
+/* replace color variables below with your project's color */
+:root {
+  --khaki: #E2E5D0; 
+  --khaki-light: color(var(--khaki) l(80%));
+  --green: #39f5ca;
+  --orange: #F95607;
+}
+
+@each $color in (khaki, khaki-light, green, orange) {
+  .bg-$(color) { background-color: var(--$(color)); }
+  .color-$(color) { color: var(--$(color)); }
+  .border-$(color) { border-color: var(--$(color)); }
+  .hover-$(color):hover { color: var(--$(color)); }
+}
+

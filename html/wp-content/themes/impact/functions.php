@@ -29,9 +29,7 @@ function add_to_context($data){
 
 //Add Options page
 if( function_exists('acf_add_options_page') ) {
-
-	acf_add_options_page();
-
+ acf_add_options_page();
 }
 
 //Use the minifed stylesheet, if available.
@@ -45,15 +43,15 @@ function handleWPhead() {
 	}
 }
 
-//Add JS to the footer
-function scripts () {
+
+// Add JS and CSS to the footer
+function assets () {
   wp_deregister_script('jquery');
-  wp_enqueue_script('sitejs', ''.get_template_directory_uri().'/build.js', array(), false, true);
+  wp_enqueue_style('site', get_template_directory_uri().'/assets/build.css');
+  wp_enqueue_script('site', ''.get_template_directory_uri().'/assets/build.js', array(), false, true);
 }
 
-add_action( 'wp_enqueue_scripts', 'scripts' );
-
-
+add_action('wp_enqueue_scripts', 'assets');
 
 //Add SVGs to the media library
 function add_svg_to_upload_mimes( $upload_mimes ) {
