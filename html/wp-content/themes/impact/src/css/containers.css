@@ -1,0 +1,9 @@
+.container {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.container { width: 100%; }
+@media (min-width: 50rem) { .container { width: 90%; } }
+@media (min-width: 60rem) { .container { width: 80%; } }
+@media (min-width: 70rem) { .container { width: 70%; } }

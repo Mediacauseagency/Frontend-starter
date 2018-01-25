@@ -1,0 +1,22 @@
+@import '../css/index.css';
+
+$blue: #c7e5ff;
+
+body {
+  background: $blue;
+}
+
+/* create color utility classes using @each */
+@each $color in (red, blue, green) {
+  .color-$color {
+    color: $color
+  }
+  .bg-$color {
+    background: $color
+  }
+}
+
+/* create padding rules using @for */
+@for $i from 1 to 5 by {
+  .p-$i { padding: $(i)rem; }
+}
