@@ -15,6 +15,3 @@
 ### JS
 - we are using [browserify](https://github.com/browserify/browserify#usage) for requiring files
 - es6 syntax is supported
-
-### Demo
-To edit the demo page, run `npm run demo` and edit the `index` files in the `demo` directory.
