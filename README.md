@@ -7,7 +7,7 @@
 1. All of the frontend code lives in `html/wp-content/themes/impact/client`, so first you'll want to `cd` into that directory.
 2. We are using node to run our various compiling processes for both JS and CSS. So first of all, make sure you have node installed globally on your machine.
 3. Now that you have node installed, you can run `npm install`, which will install all of the packages listed in `package.json` and save them to the `node_modules` directory.
-4. To start developing, run `npm run watch` from your terminal. This will watch for changes in `js/index.js` and `css/index.css` and compile and write them to `../assets/build.js` and `../assets/build.css`. You can also just run `npm run watch-css` or `npm run watch-js`.
+4. To start developing, run `npm run watch` from your terminal. This will watch for changes in `js/index.js` and `css/index.css` and compile and write them to `../assets/build.js` and `../assets/build.css`. You can also just run `npm run watch-css` or `npm run watch-js`. If your CSS and JS aren't compiling, check the logs from the watch script for any errors.
 5. When you are done developing, run `npm run build`. This will minify and gzip your CSS and JS and make it production-ready.
 
 ### CSS
@@ -54,3 +54,6 @@
 
 body { font-family: 'Poppins'; }
 ```
+
+### Demo
+`themes/impact/demo.html` points to the same compiled CSS and JS as `themes/impact/index.php`, so you can use it as a sandbox. 
