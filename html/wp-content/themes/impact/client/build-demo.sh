@@ -4,11 +4,12 @@ echo "building js..."
 npm run build-demo-js
 echo "building css..."
 npm run build-css
-echo "removing gh-pages folder..."
-(rm -rf ../gh-pages) 
-echo "making gh-pages folder..."
+echo "making gh-pages folder if it doesn't exist..."
 mkdir -p ../gh-pages 
-mkdir -p ../gh-pages/assets
+echo "cleaning gh-pages folder..."
+(rm  -rf ../gh-pages/assets)
+(rm  ../gh-pages/index.html)
+mkdir ../gh-pages/assets
 echo "copying files into gh-pages folder..."
 cp -r ../assets/* ../gh-pages/assets 
 (rm ../gh-pages/assets/build.js)
