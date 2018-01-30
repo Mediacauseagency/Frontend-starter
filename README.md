@@ -56,4 +56,27 @@ body { font-family: 'Poppins'; }
 ```
 
 ### Demo
-`themes/impact/demo.html` points to the same compiled CSS and JS as `themes/impact/index.php`, so you can use it as a sandbox. 
+To edit the demo, run `npm run watch-demo` from the `client` folder.
+The demo page uses `impact/demo.html`, the same CSS as the WP theme and `client/js/demo.js`.
+
+When you are ready to publish the demo page, follow these steps:
+- `npm run build-demo`
+- `cd` into `impact/gh-pages`
+- if this is your first time publishing, then you'll want to:
+  - `git init`
+  - `git add --all`
+  - `git commit -m [YOUR COMMIT MESSAGE]`
+  - `git checkout -b gh-pages`
+  - `git remote add origin https://github.com/mediacauseagency/[REPO NAME].git`
+  - `git push -u origin gh-pages`
+- otherwise, you can just
+  - `git add --all`
+  - `git commit -m [YOUR COMMIT MESSAGE]`
+  - `git push`
+Your demo page should now be viewable at `https://mediacauseagency.github.io/[REPO NAME]`.
+
+
+
+
+
+
