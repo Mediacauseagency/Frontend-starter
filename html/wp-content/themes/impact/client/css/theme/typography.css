@@ -23,10 +23,14 @@
   font-style: normal;
 }
 
+html {
+  line-height: 1.6;
+}
+
 .code,
 code,
 pre {
-  body { font-family: var(--system-mono); }
+  font-family: var(--system-mono);
 }
 
-body { font-family: var(--poppins); }
+body { font-family: var(--system-sans); }

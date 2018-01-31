@@ -1,12 +1,14 @@
 /* replace color variables below with your project's color */
 :root {
-  --khaki: #E2E5D0; 
-  --khaki-light: color(var(--khaki) l(80%));
-  --green: #39f5ca;
-  --orange: #F95607;
+  --grey-1: gray(98%);
+  --grey-2: gray(94%);
+  --grey-3: gray(90%);
+  --grey-4: gray(86%);
+  --grey-5: gray(82%);
+  --red: tomato;
 }
 
-@each $color in (khaki, khaki-light, green, orange) {
+@each $color in (grey-1, grey-2, grey-3, grey-4, grey-5, red) {
   .bg-$(color) { background-color: var(--$(color)); }
   .color-$(color) { color: var(--$(color)); }
   .border-$(color) { border-color: var(--$(color)); }

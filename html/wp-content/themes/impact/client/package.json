@@ -5,15 +5,14 @@
   "main": "js/index.js",
   "scripts": {
     "watch-js": "watchify -v -t babelify js/index.js -o ../assets/build.js",
-    "watch-css": "postcss css/index.css -c postcss.config.js -o ../assets/build.css -w",
+    "watch-css": "postcss css/demo.css -c postcss.config.js -o ../assets/demo.css -w",
     "watch": "concurrently \"npm run watch-css\" \"npm run watch-js\"",
     "watch-demo-js": "watchify -v -t babelify js/demo.js -o ../assets/demo.js",
-    "watch-css": "postcss css/demo.css -c postcss.config.js -o ../assets/demo.css -w",
     "watch-demo": "open ../demo.html && concurrently \"npm run watch-css\" \"npm run watch-demo-js\"",
     "build-js": "browserify -t babelify -t uglifyify -p common-shakeify js/index.js | uglifyjs -c -m > ../assets/build.js && gzip -c -9 < ../assets/build.js > ../assets/build.js.gz",
     "build-demo-js": "browserify -t babelify -t uglifyify -p common-shakeify js/demo.js | uglifyjs -c -m > ../assets/demo.js",
     "build-demo-css": "postcss css/demo.css -c postcss.config.js --env 'production' -o ../assets/demo.css && gzip -c -9 < ../assets/demo.css > ../assets/demo.css.gz",
-    "build-demo": "./build-demo.sh" ,
+    "build-demo": "./build-demo.sh",
     "build-css": "postcss css/index.css -c postcss.config.js --env 'production' -o ../assets/build.css && gzip -c -9 < ../assets/build.css > ../assets/build.css.gz",
     "build": "npm install && npm run build-js && npm run build-css"
   },
@@ -35,9 +34,14 @@
     "postcss-each": "^0.10.0",
     "postcss-easy-import": "^3.0.0",
     "postcss-for": "^2.1.1",
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.3",
     "tachyons": "^4.9.1",
     "uglifyify": "^4.0.5",
     "uglifyjs": "^2.4.11",
     "watchify": "^3.9.0"
+  },
+  "dependencies": {
+    "format-number": "^3.0.0"
   }
 }
