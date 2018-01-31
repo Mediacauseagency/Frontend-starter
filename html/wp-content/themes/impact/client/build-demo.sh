@@ -12,8 +12,7 @@ echo "cleaning gh-pages folder..."
 mkdir ../gh-pages/assets
 echo "copying files into gh-pages folder..."
 cp -r ../assets/* ../gh-pages/assets 
-(rm ../gh-pages/assets/build.js)
-(rm ../gh-pages/assets/build.js.gz)
+(rm ../gh-pages/assets/build.*)
 cp ../demo.html ../gh-pages/index.html
 
 echo "done. now cd into ../gh-pages and push to the gh-pages branch"

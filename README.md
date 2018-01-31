@@ -77,7 +77,7 @@ body { font-family: 'Poppins'; }
 
 ### Demo
 To edit the demo, run `npm run watch-demo` from the `client` folder.
-The demo page uses `impact/demo.html`, the same CSS as the WP theme and `client/js/demo.js`.
+The demo page uses `impact/demo.html`, `client/css/demo.css`, `client/js/demo.js`.
 
 When you are ready to publish the demo page, follow these steps:
 - `npm run build-demo`
@@ -95,10 +95,4 @@ When you are ready to publish the demo page, follow these steps:
   - `git push`
 
 Your demo page should now be viewable at `https://mediacauseagency.github.io/[REPO NAME]`.
-
-
-
-
-
-
 
