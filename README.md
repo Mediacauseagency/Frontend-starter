@@ -6,19 +6,19 @@
 
 1. Download [Vagrant](https://www.vagrantup.com/docs/installation/) and [VirtualBox](https://www.vagrantup.com/docs/installation/), if you haven't already downloaded them.
 2. Start up the virtual box by running `vagrant up` (this will take a while, especially the first time).
-3. Add your SSH private key to the ssh-agent and store your passphrase in the keychain: `ssh_add -K ~/.ssh/id_rsa`
-4. Populate the virtual box database:
+3. Populate the virtual box database:
+  - Have someone who has access to the server that you will be SSH-ing into (usually the staging server) grant you SSH access and give you your SSH username
+  - Add your SSH private key to the ssh-agent and store your passphrase in the keychain: `ssh_add -K ~/.ssh/id_rsa`
   - SSH into the virtual box: `vagrant ssh`
   - cd into the root directory of the project: `cd /var/www`
   - create a txt file with your SSH username: `echo 'username=[your SSH username]' > env.txt`
   - update the database: `./syncdb pull` (this will take a while, especially the first time)
 
-Once you've gone through the above steps, you should only need to run `vagrant up` to boot up the virtual box server. Your project should be viewable at `localhost:8080`.
+Once you've gone through the above steps, you should only need to run `vagrant up` to boot up the virtual box. Your project should be viewable at `localhost:8080`.
 
 It can be a good idea to periodically update the database: 
 - `vagrant ssh`
 - `cd /var/www && ./syncdb pull`
-
 
 ## Frontend
 
