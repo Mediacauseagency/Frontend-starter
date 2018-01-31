@@ -4183,7 +4183,8 @@ img { max-width: 100%; }
 .border-orange { border-color: #F95607; }
 .hover-orange:hover { color: #F95607; }
 /* replace font families below with your project's font families */
-/* font families should live in impact/assets/fonts */
+/* font family files should live in impact/assets/fonts */
+/* make sure to use the system font fallbacks */
 @font-face {
   font-family: 'Poppins';
   src:  url('fonts/Poppins/Poppins-Regular.ttf') format('truetype');
@@ -4196,4 +4197,9 @@ img { max-width: 100%; }
   font-weight: 600;
   font-style: normal;
 }
-body { font-family: Poppins, Helvetica Neue, Helvetica, Arial, sans-serif; }
+.code,
+code,
+pre {
+  body { font-family: Consolas, monaco, monospace; }
+}
+body { font-family: Poppins, -apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,ubuntu,roboto,noto,segoe ui,arial,sans-serif; }
