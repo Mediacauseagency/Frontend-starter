@@ -102,10 +102,16 @@ module.exports = incrementOnScroll;
 
 var prettyNumber = require('../prettyNumber');
 
+var getAttr = function getAttr(elm, attr) {
+  return (elm.getAttribute(attr) || '').trim();
+};
+
 var dataPrettyNumber = function dataPrettyNumber() {
   return document.querySelectorAll('[data-pretty-number]').forEach(function (elm) {
-    var string = elm.getAttribute('data-pretty-number');
-    elm.innerHTML = prettyNumber(string);
+    var number = getAttr(elm, 'data-pretty-number');
+    var prefix = getAttr(elm, 'data-pretty-number-prefix');
+    var suffix = getAttr(elm, 'data-pretty-number-suffix');
+    elm.innerHTML = '' + (prefix ? prefix : '') + prettyNumber(number) + (suffix ? suffix : '');
   });
 };
 

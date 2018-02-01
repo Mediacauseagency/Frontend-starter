@@ -1,9 +1,14 @@
 const prettyNumber = require('../prettyNumber')
 
+const getAttr = (elm, attr) => 
+  (elm.getAttribute(attr) || '').trim()
+
 const dataPrettyNumber = () => 
   document.querySelectorAll('[data-pretty-number]').forEach((elm) => {
-    const string = elm.getAttribute('data-pretty-number')
-    elm.innerHTML = prettyNumber(string)
+    const number = getAttr(elm, 'data-pretty-number')
+    const prefix = getAttr(elm, 'data-pretty-number-prefix')
+    const suffix = getAttr(elm, 'data-pretty-number-suffix')
+    elm.innerHTML = `${prefix ? prefix : ''}${prettyNumber(number)}${suffix ? suffix : ''}`
   })
 
 module.exports = dataPrettyNumber
