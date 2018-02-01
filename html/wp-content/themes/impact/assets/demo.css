@@ -4169,7 +4169,7 @@ html {
   font-size: 16px;
 }
 code {
-  font-size: 14px;
+  font-size: .85rem;
   white-space: pre-wrap;
 }
 .fade-in {

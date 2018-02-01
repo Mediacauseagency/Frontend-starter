@@ -2,55 +2,66 @@
 'use strict';
 
 var addScrollEvents = require('./helpers/addScrollEvents');
-var prettyNumber = require('./helpers/prettyNumber');
+require('./helpers/htmlToText')();
+require('./helpers/data/prettyNumber')();
+require('./helpers/data/swapText')();
 
-document.querySelectorAll('.js-html').forEach(function (elm) {
-  var pre = document.createElement('pre');
-  var code = document.createElement('code');
-  code.innerText = elm.innerHTML;
-  pre.appendChild(code);
-  elm.insertBefore(pre, elm.childNodes[0]);
-});
+var _require = require('./helpers/data/toggleClasses'),
+    dataToggleClassesSelf = _require.dataToggleClassesSelf,
+    dataToggleClassesTarget = _require.dataToggleClassesTarget;
 
-document.querySelectorAll('[data-pretty-number]').forEach(function (elm) {
-  var string = elm.getAttribute('data-pretty-number');
-  elm.innerHTML = prettyNumber(string);
-});
+dataToggleClassesSelf();
+dataToggleClassesTarget();
 
-document.querySelectorAll('[data-toggle-classes-self]').forEach(function (elm) {
-  elm.addEventListener('click', function (ev) {
-    var href = (ev.target.attributes['href'].value || '').trim();
-    if (href && href !== '#') return;
-    ev.preventDefault();
-    var classNames = elm.getAttribute('data-toggle-classes-self').split(' ');
-    classNames.forEach(function (className) {
-      elm.classList.toggle(className.trim());
+},{"./helpers/addScrollEvents":2,"./helpers/data/prettyNumber":3,"./helpers/data/swapText":4,"./helpers/data/toggleClasses":5,"./helpers/htmlToText":6}],2:[function(require,module,exports){
+'use strict';
+
+// cbs should be an array of callbacks
+// debounce can be between 1 - 10, 1 being most frequent and 10 being least
+var addScrollEvents = function addScrollEvents(cbs) {
+  var debounce = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 3;
+
+  var i = 0;
+  window.document.addEventListener('scroll', function () {
+    debounce = debounce > 10 ? 10 : debounce;
+    debounce = debounce < 1 ? 1 : debounce;
+    i += 1;
+    if (i % debounce === 0) return;
+    cbs.forEach(function (cb) {
+      return cb();
     });
   });
-});
+};
 
-document.querySelectorAll('[data-toggle-classes-target]').forEach(function (elm) {
-  elm.addEventListener('click', function (ev) {
-    var href = (ev.target.attributes['href'].value || '').trim();
-    if (href && href !== '#') return;
-    ev.preventDefault();
-    var classNames = elm.getAttribute('data-toggle-classes-target').split(' ');
-    var targets = document.querySelectorAll(classNames[0]);
-    classNames.forEach(function (className, i) {
-      if (i === 0) return;
-      targets.forEach(function (target) {
-        target.classList.toggle(className.trim());
-      });
-    });
+module.exports = addScrollEvents;
+
+},{}],3:[function(require,module,exports){
+'use strict';
+
+var prettyNumber = require('../prettyNumber');
+
+var dataPrettyNumber = function dataPrettyNumber() {
+  return document.querySelectorAll('[data-pretty-number]').forEach(function (elm) {
+    var string = elm.getAttribute('data-pretty-number');
+    elm.innerHTML = prettyNumber(string);
   });
-});
+};
+
+module.exports = dataPrettyNumber;
+
+},{"../prettyNumber":7}],4:[function(require,module,exports){
+'use strict';
+
+var style = require('../style');
 
 var replaceText = function replaceText(text, parent) {
   var child = document.createElement('div');
   child.innerText = text;
-  child.style.position = 'absolute';
-  child.style.top = '0';
-  child.style.top = 'left';
+  style(child, {
+    position: 'absolute',
+    left: 0,
+    top: 0
+  });
   child.className = 'js-swap-text-child';
   var previousChild = parent.querySelector('.js-swap-text-child');
   previousChild && previousChild.remove();
@@ -98,31 +109,77 @@ var swapText = function swapText() {
   });
 };
 
-swapText();
+module.exports = swapText;
 
-},{"./helpers/addScrollEvents":2,"./helpers/prettyNumber":3}],2:[function(require,module,exports){
+},{"../style":8}],5:[function(require,module,exports){
 'use strict';
 
-// cbs should be an array of callbacks
-// debounce can be between 1 - 10, 1 being most frequent and 10 being least
-var addScrollEvents = function addScrollEvents(cbs) {
-  var debounce = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 3;
+function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
-  var i = 0;
-  window.document.addEventListener('scroll', function () {
-    debounce = debounce > 10 ? 10 : debounce;
-    debounce = debounce < 1 ? 1 : debounce;
-    i += 1;
-    if (i % debounce === 0) return;
-    cbs.forEach(function (cb) {
-      return cb();
+var checkHref = function checkHref(ev) {
+  var href = (ev.target.attributes['href'].value || '').trim();
+  return href && href !== '#';
+};
+
+var getClassNames = function getClassNames(elm, attr) {
+  return elm.getAttribute(attr).split(' ');
+};
+
+var dataToggleClassesSelf = function dataToggleClassesSelf() {
+  return document.querySelectorAll('[data-toggle-classes-self]').forEach(function (elm) {
+    elm.addEventListener('click', function (ev) {
+      if (checkHref(ev)) return;
+      ev.preventDefault();
+      var classNames = getClassNames(elm, 'data-toggle-classes-self');
+      classNames.forEach(function (className) {
+        elm.classList.toggle(className.trim());
+      });
     });
   });
 };
 
-module.exports = addScrollEvents;
+var dataToggleClassesTarget = function dataToggleClassesTarget() {
+  return document.querySelectorAll('[data-toggle-classes-target]').forEach(function (elm) {
+    elm.addEventListener('click', function (ev) {
+      if (checkHref(ev)) return;
+      ev.preventDefault();
 
-},{}],3:[function(require,module,exports){
+      var _getClassNames = getClassNames(elm, 'data-toggle-classes-target'),
+          _getClassNames2 = _toArray(_getClassNames),
+          targetSelector = _getClassNames2[0],
+          classNames = _getClassNames2.slice(1);
+
+      var targets = document.querySelectorAll(targetSelector);
+      classNames.forEach(function (className, i) {
+        targets.forEach(function (target) {
+          target.classList.toggle(className.trim());
+        });
+      });
+    });
+  });
+};
+
+module.exports = {
+  dataToggleClassesSelf: dataToggleClassesSelf,
+  dataToggleClassesTarget: dataToggleClassesTarget
+};
+
+},{}],6:[function(require,module,exports){
+'use strict';
+
+var htmlToText = function htmlToText() {
+  document.querySelectorAll('.js-html').forEach(function (elm) {
+    var pre = document.createElement('pre');
+    var code = document.createElement('code');
+    code.innerText = elm.innerHTML;
+    pre.appendChild(code);
+    elm.insertBefore(pre, elm.childNodes[0]);
+  });
+};
+
+module.exports = htmlToText;
+
+},{}],7:[function(require,module,exports){
 'use strict';
 
 var addCommas = require('format-number')();
@@ -143,7 +200,19 @@ var prettyNumber = function prettyNumber(num) {
 
 module.exports = prettyNumber;
 
-},{"format-number":4}],4:[function(require,module,exports){
+},{"format-number":9}],8:[function(require,module,exports){
+"use strict";
+
+var style = function style(elm) {
+  var obj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  return Object.keys(obj).map(function (key) {
+    elm && elm.style && (elm.style[key] = obj[key]);
+  });
+};
+
+module.exports = style;
+
+},{}],9:[function(require,module,exports){
 
 module.exports = formatter;
 module.exports.default = formatter;
