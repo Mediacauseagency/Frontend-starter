@@ -19,7 +19,7 @@
         <h2 class='code ma0'>data-pretty-number</h2>
         <p>This function will loop through all elements with the <code>data-pretty-number</code> attribute and format and display the attributes into the element as shown below. To use it, just require the <code>helpers/prettyNumbers</code> file.
         </p>
-        <div class='js-show-example'>
+        <div class='js-html'>
 <h3 data-pretty-number='223434235'></h3>
 <h3 data-pretty-number='854934'></h3>
         </div>
@@ -29,7 +29,7 @@
         <h2 class='code ma0'>data-toggle-classes-self</h2>
         <p>This function will loop through all elements with the <code>data-toggle-classes-self</code> attribute and add a click event to it to toggle the given classes. The click event will prevent default unless the event target has an href other then a hash.
         </p>
-        <div class='js-show-example'>
+        <div class='js-html'>
 <a href='#' data-toggle-classes-self='color-red strike'>Click me!</a>
 <br>
 <a href='http://spacejam.com' data-toggle-classes-self='color-red strike'>
@@ -42,7 +42,7 @@
         <h2 class='code ma0'>data-toggle-classes-target</h2>
         <p>This function will loop through all elements with the <code>data-toggle-classes-target</code> attribute and add a click event to it to toggle the given classes on a target. The click event will prevent default unless the event target has an href other then a hash. The first argument in the attributes should be the target's selector and the following arguments should be the class names.
         </p>
-        <div class='js-show-example'>
+        <div class='js-html'>
 <a href='#' data-toggle-classes-target='#js-toggle-classes-target color-red ttu'>
   Click me!
 </a>
@@ -50,6 +50,15 @@
         </div>
       </section>
 
+      <section class='ba border-grey-3 pa3 mb5'>
+        <h2 class='code ma0'>data-swap-text</h2>
+        <div class='js-html'>
+<p class='f3' 
+   data-swap-text='Don Quixote by Miguel de Cervantes. In Search of Lost Time by Marcel Proust. Ulysses by James Joyce. The Odyssey by Homer' 
+   data-swap-text-timeout='3000'>
+</p>
+        </div>
+      </section>
 
     </div>
   </div>

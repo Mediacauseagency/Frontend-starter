@@ -4168,6 +4168,64 @@ img { max-width: 100%; }
 html {
   font-size: 16px;
 }
+code {
+  font-size: 14px;
+  white-space: pre-wrap;
+}
+.fade-in {
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+  -webkit-animation: fadein 300ms 300ms forwards;
+          animation: fadein 300ms 300ms forwards;
+}
+.fade-out {
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+  -webkit-animation: fadeout 300ms forwards;
+          animation: fadeout 300ms forwards;
+}
+@-webkit-keyframes fadeout {
+  0% { 
+    opacity: 1; 
+    visibility: visible;
+  }
+  100%   { 
+    opacity: 0; 
+    visibility: hidden;
+  }
+}
+@keyframes fadeout {
+  0% { 
+    opacity: 1; 
+    visibility: visible;
+  }
+  100%   { 
+    opacity: 0; 
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes fadein {
+  0%   { 
+    opacity: 0; 
+    visibility: hidden;
+  }
+  100% { 
+    opacity: 1; 
+    visibility: visible;
+  }
+}
+@keyframes fadein {
+  0%   { 
+    opacity: 0; 
+    visibility: hidden;
+  }
+  100% { 
+    opacity: 1; 
+    visibility: visible;
+  }
+}
 /* replace color variables below with your project's color */
 .bg-grey-1 { background-color: rgb(250, 250, 250); }
 .color-grey-1 { color: rgb(250, 250, 250); }
