@@ -4,7 +4,7 @@
 var addScrollEvents = require('./helpers/addScrollEvents');
 var prettyNumber = require('./helpers/prettyNumber');
 
-document.querySelectorAll('.js-show-example').forEach(function (elm) {
+document.querySelectorAll('.js-html').forEach(function (elm) {
   var pre = document.createElement('pre');
   var code = document.createElement('code');
   code.innerText = elm.innerHTML;
@@ -37,14 +37,68 @@ document.querySelectorAll('[data-toggle-classes-target]').forEach(function (elm)
     var classNames = elm.getAttribute('data-toggle-classes-target').split(' ');
     var targets = document.querySelectorAll(classNames[0]);
     classNames.forEach(function (className, i) {
-      if (i !== 0) {
-        targets.forEach(function (target) {
-          target.classList.toggle(className.trim());
-        });
-      }
+      if (i === 0) return;
+      targets.forEach(function (target) {
+        target.classList.toggle(className.trim());
+      });
     });
   });
 });
+
+var replaceText = function replaceText(text, parent) {
+  var child = document.createElement('div');
+  child.innerText = text;
+  child.style.position = 'absolute';
+  child.style.top = '0';
+  child.style.top = 'left';
+  child.className = 'js-swap-text-child';
+  var previousChild = parent.querySelector('.js-swap-text-child');
+  previousChild && previousChild.remove();
+  parent.appendChild(child);
+};
+
+var show = function show(text, len, elm, i, timeout) {
+  window.setTimeout(function () {
+    replaceText(text[i], elm);
+    var child = elm.querySelector('.js-swap-text-child');
+    child.classList.add('fade-in');
+    child.classList.remove('fade-out');
+    window.setTimeout(function () {
+      child.classList.add('fade-out');
+      child.classList.remove('fade-in');
+    }, timeout - 300);
+    show(text, len, elm, ++i % len, timeout);
+  }, timeout);
+};
+
+var swapText = function swapText() {
+  var elms = document.querySelectorAll('[data-swap-text]');
+  var timeoutElm = document.querySelectorAll('[data-swap-text-timeout]')[0];
+  var timeout = timeoutElm ? timeoutElm.getAttribute('data-swap-text-timeout') : 2000;
+  elms.forEach(function (elm) {
+    var i = 0;
+    var text = (elm.getAttribute('data-swap-text') || '').split(/\.|,/).filter(Boolean).map(function (s) {
+      return s.trim();
+    });
+    var longest = text.reduce(function (longest, current) {
+      return current.length >= longest.length ? current : longest;
+    }, '');
+    elm.style.position = 'relative';
+    var spacer = document.createElement('div');
+    spacer.innerText = longest;
+    spacer.style.visibility = 'hidden';
+    elm.appendChild(spacer);
+    replaceText(text[0], elm);
+    var len = text.length;
+    window.setTimeout(function () {
+      var child = elm.querySelector('.js-swap-text-child');
+      child.classList.add('fade-out');
+    }, timeout - 300);
+    show(text, len, elm, ++i, timeout);
+  });
+};
+
+swapText();
 
 },{"./helpers/addScrollEvents":2,"./helpers/prettyNumber":3}],2:[function(require,module,exports){
 'use strict';
