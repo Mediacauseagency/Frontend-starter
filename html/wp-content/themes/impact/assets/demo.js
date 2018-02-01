@@ -1,10 +1,10 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var addScrollEvents = require('./helpers/addScrollEvents');
 require('./helpers/htmlToText')();
 require('./helpers/data/prettyNumber')();
 require('./helpers/data/swapText')();
+require('./helpers/data/incrementAnimation')();
 
 var _require = require('./helpers/data/toggleClasses'),
     dataToggleClassesSelf = _require.dataToggleClassesSelf,
@@ -13,7 +13,7 @@ var _require = require('./helpers/data/toggleClasses'),
 dataToggleClassesSelf();
 dataToggleClassesTarget();
 
-},{"./helpers/addScrollEvents":2,"./helpers/data/prettyNumber":3,"./helpers/data/swapText":4,"./helpers/data/toggleClasses":5,"./helpers/htmlToText":6}],2:[function(require,module,exports){
+},{"./helpers/data/incrementAnimation":3,"./helpers/data/prettyNumber":4,"./helpers/data/swapText":5,"./helpers/data/toggleClasses":6,"./helpers/htmlToText":7}],2:[function(require,module,exports){
 'use strict';
 
 // cbs should be an array of callbacks
@@ -38,6 +38,68 @@ module.exports = addScrollEvents;
 },{}],3:[function(require,module,exports){
 'use strict';
 
+// adds commas to numbers
+var formatNumber = require('format-number')();
+var addScrollEvents = require('../addScrollEvents');
+var toggleInView = require('../toggleInView');
+
+var attr = 'data-increment';
+
+var getExtraAttr = function getExtraAttr(elm, extra) {
+  return (elm.getAttribute(attr + '-' + extra) || '').trim();
+};
+
+var animate = function animate(time, goal, incrementBy, elm, start) {
+  window.setTimeout(function () {
+    var currentStep = start + incrementBy;
+    var currentStepCapped = currentStep >= goal ? goal : currentStep;
+    var suffix = getExtraAttr(elm, 'suffix');
+    var prefix = getExtraAttr(elm, 'prefix');
+    elm.innerText = '' + (prefix ? prefix : '') + formatNumber(currentStepCapped) + (suffix ? suffix : '');
+    if (currentStepCapped < goal) {
+      // ease out function
+      var newTime = start < goal / 1.75 ? time : time * 1.15;
+      animate(newTime, goal, incrementBy, elm, currentStepCapped);
+    }
+  }, time);
+};
+
+var incrementOnScroll = function incrementOnScroll() {
+  return addScrollEvents([function () {
+    return toggleInView('[' + attr + ']', incrementOnScrollCb);
+  }]);
+};
+
+var incrementOnScrollCb = function incrementOnScrollCb(elm, inView, i) {
+  var envKey = 'increment_animation_running_' + i;
+  window.ENV = window.ENV ? window.ENV : {};
+
+  if (!inView) {
+    window.ENV[envKey] = false;
+    return;
+  }
+
+  if (window.ENV[envKey]) return;
+
+  window.ENV[envKey] = true;
+
+  var goal = Number(elm.getAttribute('' + attr) || 0);
+
+  if (!Number.isInteger(goal)) {
+    return console.warn('the ' + attr + ' attribute must be an integer');
+  }
+
+  // the number of steps in the animation
+  var incrementBy = Math.ceil(goal / 30);
+
+  animate(60, goal, incrementBy, elm, 0);
+};
+
+module.exports = incrementOnScroll;
+
+},{"../addScrollEvents":2,"../toggleInView":10,"format-number":11}],4:[function(require,module,exports){
+'use strict';
+
 var prettyNumber = require('../prettyNumber');
 
 var dataPrettyNumber = function dataPrettyNumber() {
@@ -49,7 +111,7 @@ var dataPrettyNumber = function dataPrettyNumber() {
 
 module.exports = dataPrettyNumber;
 
-},{"../prettyNumber":7}],4:[function(require,module,exports){
+},{"../prettyNumber":8}],5:[function(require,module,exports){
 'use strict';
 
 var style = require('../style');
@@ -111,7 +173,7 @@ var swapText = function swapText() {
 
 module.exports = swapText;
 
-},{"../style":8}],5:[function(require,module,exports){
+},{"../style":9}],6:[function(require,module,exports){
 'use strict';
 
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
@@ -164,7 +226,7 @@ module.exports = {
   dataToggleClassesTarget: dataToggleClassesTarget
 };
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 var htmlToText = function htmlToText() {
@@ -179,7 +241,7 @@ var htmlToText = function htmlToText() {
 
 module.exports = htmlToText;
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var addCommas = require('format-number')();
@@ -200,7 +262,7 @@ var prettyNumber = function prettyNumber(num) {
 
 module.exports = prettyNumber;
 
-},{"format-number":9}],8:[function(require,module,exports){
+},{"format-number":11}],9:[function(require,module,exports){
 "use strict";
 
 var style = function style(elm) {
@@ -212,7 +274,32 @@ var style = function style(elm) {
 
 module.exports = style;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
+"use strict";
+
+// takes a selector and a callback that gets called
+// with three args: 
+// 1. elm
+// 2. whether the elm is in view
+// 3. the index of that elm on the page
+var toggleInView = function toggleInView(selector, cb) {
+  var elms = document.querySelectorAll(selector);
+  elms.forEach(function (elm, i) {
+    var scrollTop = window.document.body.scrollTop + window.innerHeight;
+    var elmTop = findOffset(elm);
+    var inView = scrollTop >= elmTop;
+    cb(elm, inView, i);
+  });
+};
+
+var findOffset = function findOffset(elm) {
+  if (elm.offsetTop) return elm.offsetTop;
+  return findOffset(elm.offsetParent);
+};
+
+module.exports = toggleInView;
+
+},{}],11:[function(require,module,exports){
 
 module.exports = formatter;
 module.exports.default = formatter;
