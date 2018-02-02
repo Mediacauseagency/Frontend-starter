@@ -31,8 +31,8 @@ const show = (text, len, elm, i, timeout) => {
 const swapText = () => {
   const elms = document.querySelectorAll('[data-swap-text]')
   const timeoutElm = document.querySelectorAll('[data-swap-text-timeout]')[0]
-  const timeout = timeoutElm 
-    ? timeoutElm.getAttribute('data-swap-text-timeout') 
+  const timeout = timeoutElm
+    ? timeoutElm.getAttribute('data-swap-text-timeout')
     : 2000
   elms.forEach((elm) => {
     let i = 0

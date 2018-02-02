@@ -2,7 +2,8 @@
 // It assigns the ENV object to window, so that properties
 // can be accessed globally.
 window.ENV = {
-  chartColors: ['tomato', 'teal', 'goldenrod'],
+  chartColors: ['tomato', 'goldenrod', 'teal', 'grey'],
   chartFontFamily: 'Consolas, monaco, monospace',
-  chartFontColor: 'grey'
+  chartFontColor: 'grey',
+  chartFontSize: 11
 }

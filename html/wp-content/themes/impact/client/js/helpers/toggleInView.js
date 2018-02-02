@@ -1,5 +1,5 @@
 // takes a selector and a callback that gets called
-// with three args: 
+// with three args:
 // 1. elm
 // 2. whether the elm is in view
 // 3. the index of that elm on the page
@@ -14,7 +14,7 @@ const toggleInView = (selector, cb) => {
 }
 
 const findOffset = elm => {
-  if(elm.offsetTop) return elm.offsetTop
+  if (elm.offsetTop) return elm.offsetTop
   return findOffset(elm.offsetParent)
 }
 

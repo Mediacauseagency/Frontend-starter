@@ -14,7 +14,8 @@
     "build-demo-css": "postcss css/demo.css -c postcss.config.js --env 'production' -o ../assets/demo.css && gzip -c -9 < ../assets/demo.css > ../assets/demo.css.gz",
     "build-demo": "./build-demo.sh",
     "build-css": "postcss css/index.css -c postcss.config.js --env 'production' -o ../assets/build.css && gzip -c -9 < ../assets/build.css > ../assets/build.css.gz",
-    "build": "npm install && npm run build-js && npm run build-css"
+    "build": "npm install && npm run build-js && npm run build-css",
+    "lint": "standard --fix | snazzy || true"
   },
   "author": "Yutaka Houlette <yutakahoulette@gmail.com>",
   "license": "MIT",

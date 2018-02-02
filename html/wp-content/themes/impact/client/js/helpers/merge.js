@@ -1,5 +1,5 @@
 const merge = (obj, src) => {
-  Object.keys(src).forEach(function(key) { obj[key] = src[key] })
+  Object.keys(src).forEach(function (key) { obj[key] = src[key] })
   return obj
 }
 

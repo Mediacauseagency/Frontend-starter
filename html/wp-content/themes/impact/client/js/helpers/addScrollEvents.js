@@ -1,7 +1,7 @@
 
 // cbs should be an array of callbacks
 // debounce can be between 1 - 10, 1 being most frequent and 10 being least
-const addScrollEvents = (cbs, debounce = 3) => { 
+const addScrollEvents = (cbs, debounce = 3) => {
   let i = 0
   window.document.addEventListener('scroll', () => {
     debounce = debounce > 10 ? 10 : debounce

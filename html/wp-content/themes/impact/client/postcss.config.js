@@ -8,7 +8,7 @@ module.exports = (ctx) => ({
     'postcss-conditionals': {},
     'postcss-cssnext': {
       warnForDuplicates: false,
-      features: {rem: false},
+      features: {rem: false}
     },
     'cssnano': ctx.env === 'production' ? {} : false
   }

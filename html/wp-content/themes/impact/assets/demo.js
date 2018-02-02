@@ -5,9 +5,10 @@
 // It assigns the ENV object to window, so that properties
 // can be accessed globally.
 window.ENV = {
-  chartColors: ['tomato', 'teal', 'goldenrod'],
+  chartColors: ['tomato', 'goldenrod', 'teal', 'grey'],
   chartFontFamily: 'Consolas, monaco, monospace',
-  chartFontColor: 'grey'
+  chartFontColor: 'grey',
+  chartFontSize: 11
 };
 
 },{}],2:[function(require,module,exports){
@@ -54,7 +55,6 @@ module.exports = addScrollEvents;
 
 var Chart = require('chart.js');
 var addCommas = require('format-number')();
-var prettyNum = require('../prettyNumber');
 var merge = require('../merge');
 
 var getEnvVal = function getEnvVal(key, fallBack) {
@@ -62,19 +62,22 @@ var getEnvVal = function getEnvVal(key, fallBack) {
 };
 
 var colors = getEnvVal('chartColors', ['tomato', 'goldenrod']);
-var fontFamily = getEnvVal('chartFontFamily', '-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,ubuntu,roboto,noto,segoe ui,arial,sans-serif');
-var fontColor = getEnvVal('chartFontColor', 'rgba(0,0,0,0.8)');
+
+var setChartGlobals = function setChartGlobals(chartKey, envKey, fallBack) {
+  Chart.defaults.global[chartKey] = getEnvVal(envKey, fallBack);
+};
 
 // setting some global defaults use window.ENV or fallbacks
-Chart.defaults.global.defaultFontFamily = fontFamily;
-Chart.defaults.global.defaultFontColor = fontColor;
+setChartGlobals('defaultFontFamily', 'chartFontFamily', '-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,ubuntu,roboto,noto,segoe ui,arial,sans-serif');
+setChartGlobals('defaultFontColor', 'chartFontColor', 'rgba(0,0,0,0.8)');
+setChartGlobals('defaultFontSize', 'chartFontSize', 12);
 
-var createDataSets = function createDataSets(series, datapoints, cb) {
+var createDataSets = function createDataSets(series, datapoints) {
   return series.map(function (s, i) {
     return {
       label: s,
-      data: datapoints.map(function (arr, ii) {
-        return cb ? cb(arr, i, ii) : arr[i];
+      data: datapoints.map(function (arr) {
+        return arr[i];
       })
     };
   });
@@ -118,38 +121,32 @@ var mergeOptionsByType = {
   var stacked = Boolean(elm.getAttribute('data-chart-stacked'));
   var elmData = JSON.parse(elm.getAttribute('data-chart-data'));
 
+  var whiteList = ['bar', 'line', 'pie'];
+
   if (!elmData) {
     console.warn('data-chart-data attribute must contain data');
     return;
   }
-  if (!chartType) {
-    console.warn('data-chart attribute must contain a valid chart type');
+  if (!chartType || !whiteList.includes(chartType)) {
+    console.warn('data-chart attribute must contain a valid chart type (bar, line or pie)');
     return;
   }
 
   var ctx = void 0;
-  var chart = void 0;
   var datasets = [];
 
-  var chartKey = 'chart_' + i;
   var labels = Object.keys(elmData.data) || [];
   var datapoints = Object.values(elmData.data) || [];
   var series = elmData.series.split(',').filter(Boolean).map(function (s) {
     return s.trim();
   });
-  var seriesLen = series.length;
 
-  if (chartType === 'line') {
-    datasets = createDataSets(series, datapoints, function (arr, i, ii) {
-      return arr[i];
-    });
-  }
-  if (chartType === 'bar') {
+  if (chartType === 'bar' || chartType === 'line') {
     datasets = createDataSets(series, datapoints);
   }
   if (chartType === 'pie') {
     datasets = [{
-      data: datapoints[0],
+      data: elmData.data,
       backgroundColor: colors
     }];
   }
@@ -171,7 +168,6 @@ var mergeOptionsByType = {
     scaleBeginAtZero: true,
     animation: { duration: 3000 },
     tooltips: {
-      mode: chartType === 'bar' ? 'index' : 'nearest',
       callbacks: {
         label: function label(_label, data) {
           if (chartType === 'pie') {
@@ -182,7 +178,6 @@ var mergeOptionsByType = {
       }
     },
     legend: {
-      onClick: function onClick() {},
       labels: {
         filter: function filter(legendItem) {
           return Boolean(legendItem.text);
@@ -192,7 +187,7 @@ var mergeOptionsByType = {
   };
 
   ctx = elm.getContext('2d');
-  chart = new Chart(ctx, {
+  new Chart(ctx, { // eslint-disable-line
     type: chartType,
     data: {
       labels: chartType === 'pie' ? series : labels,
@@ -211,7 +206,7 @@ var mergeOptionsByType = {
       scales: {
         xAxes: [{ stacked: stacked }],
         yAxes: [{
-          ticks: { callback: prettyNum },
+          ticks: { callback: addCommas },
           stacked: stacked
         }]
       } }, defaultOptions)
@@ -224,7 +219,7 @@ var initCharts = function initCharts() {
 
 module.exports = initCharts;
 
-},{"../merge":10,"../prettyNumber":11,"chart.js":14,"format-number":70}],5:[function(require,module,exports){
+},{"../merge":10,"chart.js":14,"format-number":70}],5:[function(require,module,exports){
 'use strict';
 
 // adds commas to numbers
@@ -244,7 +239,7 @@ var animate = function animate(time, goal, incrementBy, elm, start) {
     var currentStepCapped = currentStep >= goal ? goal : currentStep;
     var suffix = getExtraAttr(elm, 'suffix');
     var prefix = getExtraAttr(elm, 'prefix');
-    elm.innerText = '' + (prefix ? prefix : '') + formatNumber(currentStepCapped) + (suffix ? suffix : '');
+    elm.innerText = '' + (prefix || '') + formatNumber(currentStepCapped) + (suffix || '');
     if (currentStepCapped < goal) {
       // ease out function
       var newTime = start < goal / 1.75 ? time : time * 1.15;
@@ -300,7 +295,7 @@ var dataPrettyNumber = function dataPrettyNumber() {
     var number = getAttr(elm, 'data-pretty-number');
     var prefix = getAttr(elm, 'data-pretty-number-prefix');
     var suffix = getAttr(elm, 'data-pretty-number-suffix');
-    elm.innerHTML = '' + (prefix ? prefix : '') + prettyNumber(number) + (suffix ? suffix : '');
+    elm.innerHTML = '' + (prefix || '') + prettyNumber(number) + (suffix || '');
   });
 };
 
@@ -485,7 +480,7 @@ module.exports = style;
 "use strict";
 
 // takes a selector and a callback that gets called
-// with three args: 
+// with three args:
 // 1. elm
 // 2. whether the elm is in view
 // 3. the index of that elm on the page

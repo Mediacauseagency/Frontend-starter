@@ -8,6 +8,3 @@ const {dataToggleClassesSelf, dataToggleClassesTarget} = require('./helpers/data
 
 dataToggleClassesSelf()
 dataToggleClassesTarget()
-
-
-
