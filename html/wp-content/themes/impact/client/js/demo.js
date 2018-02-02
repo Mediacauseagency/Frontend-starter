@@ -1,3 +1,4 @@
+require('./ENV')
 require('./helpers/htmlToText')()
 require('./helpers/data/prettyNumber')()
 require('./helpers/data/swapText')()

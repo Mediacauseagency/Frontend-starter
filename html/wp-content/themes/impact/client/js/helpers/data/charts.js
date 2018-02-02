@@ -1,49 +1,38 @@
 const Chart = require('chart.js')
 const addCommas = require('format-number')()
 const prettyNum = require('../prettyNumber')
+const merge = require('../merge')
 
-const colors = (window.ENV && window.ENV.chartColors) 
-  ? window.ENV.chartColors
-  : ['tomato', 'blue', 'goldenrod']
+const getEnvVal = (key, fallBack) => 
+  (window.ENV && window.ENV[key]) ? window.ENV[key] : fallBack
 
-const largerYear = (y1, y2, gt) => {
-  if(gt) {
-    return Number(y1) > Number(y2)
-  } else {
-    return Number(y1) >= Number(y2)
-  }
-}
+const colors = getEnvVal('chartColors', ['tomato', 'goldenrod'])
+const fontFamily = getEnvVal('chartFontFamily', '-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,ubuntu,roboto,noto,segoe ui,arial,sans-serif')
+const fontColor = getEnvVal('chartFontColor', 'rgba(0,0,0,0.8)')
 
-const now = new Date
+// setting some global defaults use window.ENV or fallbacks
+Chart.defaults.global.defaultFontFamily = fontFamily
+Chart.defaults.global.defaultFontColor = fontColor
 
-const currentYear = now.getUTCFullYear()
-
-const merge = (obj, src) => {
-  Object.keys(src).forEach(function(key) { obj[key] = src[key] })
-  return obj
-}
-
-const createDataSets = (series, datapoints, projection, cb) =>
+const createDataSets = (series, datapoints, cb) =>
   series.map((s, i) => ({
-    projection,
-    label: projection ? '' : s ,
+    label: s,
     data: datapoints.map((arr, ii) => cb ? cb(arr, i, ii) : arr[i])
   }))
 
 const mergeOptionsByType = { 
-  line: ({baseOptions, i, projection}) => {
+  line: ({baseOptions, i}) => {
     const color = colors[i % colors.length]
-    const options = merge(baseOptions, {
+    return merge(baseOptions, {
       fill: false,
       backgroundColor: color,
       borderColor: color,
       lineTension: 0
     })
-    return projection ? Object.assign({borderDash: [5,5]}, options) : options
   },
   bar: ({baseOptions, i, labels}) => {
     const color = colors[i % colors.length]
-    const bgColors = labels.map(l => largerYear(currentYear, l) ? color : 'rgba(0,0,0,0.2)')
+    const bgColors = labels.map(_ => color)
     return merge(baseOptions, {
       borderColor: color,
       borderWidth: 2,
@@ -80,26 +69,15 @@ const renderChart = (elm, i) => {
   const series = elmData.series.split(',').filter(Boolean).map(s => s.trim())
   const seriesLen = series.length
 
-  const latestYear = labels[labels.length - 1]
-
-  if (chartType === 'line' && largerYear(latestYear, currentYear)) {
+  if (chartType === 'line') {
     datasets = createDataSets(
       series, 
       datapoints, 
-      false,
-      (arr, i, ii) => largerYear(currentYear, labels[ii]) ? arr[i] : NaN
+      (arr, i, ii) => arr[i]
     )
-    datasets = datasets.concat(
-      createDataSets(
-        series, 
-        datapoints, 
-        true,
-        (arr, i, ii) => largerYear(labels[ii], currentYear) ? arr[i] : NaN
-      )
-    )
-  } 
+  }
   if (chartType === 'bar') {
-    datasets = createDataSets(series, datapoints, false)
+    datasets = createDataSets(series, datapoints)
   }
   if (chartType === 'pie') {
     datasets = [{
@@ -108,12 +86,12 @@ const renderChart = (elm, i) => {
     }]
   }
 
-  const createDataset = ({chartType, label, data, projection, i}) => {
+  const createDataset = ({chartType, label, data, i}) => {
     const baseOptions = {
       label,
       data,
     }
-    return mergeOptionsByType[chartType]({baseOptions, i, projection, labels})
+    return mergeOptionsByType[chartType]({baseOptions, i, labels})
   }
 
   const defaultOptions = {
@@ -145,13 +123,12 @@ const renderChart = (elm, i) => {
       labels: chartType === 'pie' ? series : labels,
       datasets: chartType === 'pie' 
         ? datasets
-        : datasets.map(({label, data, projection}, i) =>
+        : datasets.map(({label, data}, i) =>
             createDataset({
               chartType,
               label, 
               data, 
-              projection, 
-              i: projection ? (i - 2) : i
+              i
             })
           )
     },
@@ -170,8 +147,7 @@ const renderChart = (elm, i) => {
   })
 }
 
-const initCharts = () => {
+const initCharts = () =>
   document.querySelectorAll('[data-chart]').forEach(renderChart)
-}
 
 module.exports = initCharts
