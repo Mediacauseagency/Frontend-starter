@@ -258,12 +258,7 @@ var incrementOnScrollCb = function incrementOnScrollCb(elm, inView, i) {
   var envKey = 'increment_animation_running_' + i;
   window.ENV = window.ENV ? window.ENV : {};
 
-  if (!inView) {
-    window.ENV[envKey] = false;
-    return;
-  }
-
-  if (window.ENV[envKey]) return;
+  if (!inView || window.ENV[envKey]) return;
 
   window.ENV[envKey] = true;
 
