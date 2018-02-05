@@ -1,0 +1,19 @@
+@import 'data-tooltip'; /* npm */
+
+[class*=tooltip--]:before, 
+[class*=tooltip--]:after {
+  z-index: 3; 
+}
+
+[class*=tooltip--]:after {
+  max-width: 20rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+  font-weight: 500;
+  font-size: .75rem;
+  font-style: normal;
+  letter-spacing: 1px;
+  box-shadow: 1px 1px 4px 1px rgba(0,0,0,.1);
+}

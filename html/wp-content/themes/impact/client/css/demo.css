@@ -1,1 +1,18 @@
 @import '/index';
+
+.my-fancy-animation {
+  display: inline-block;
+  opacity: 0;
+  animation: myFancyAnimation 1500ms 500ms ease-out forwards;
+}
+
+@keyframes myFancyAnimation {
+  0%   { 
+    transform: translateX(-100%) rotate(720deg);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateX(0) rotate(0);
+  }
+}
+

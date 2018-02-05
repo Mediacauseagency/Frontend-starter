@@ -15,11 +15,13 @@ window.ENV = {
 'use strict';
 
 require('./ENV');
+require('./helpers/data/charts')();
 require('./helpers/htmlToText')();
 require('./helpers/data/prettyNumber')();
 require('./helpers/data/swapText')();
 require('./helpers/data/incrementAnimation')();
-require('./helpers/data/charts')();
+require('./helpers/data/inViewAddClass')();
+require('./helpers/data/modal')();
 
 var _require = require('./helpers/data/toggleClasses'),
     dataToggleClassesSelf = _require.dataToggleClassesSelf,
@@ -28,7 +30,7 @@ var _require = require('./helpers/data/toggleClasses'),
 dataToggleClassesSelf();
 dataToggleClassesTarget();
 
-},{"./ENV":1,"./helpers/data/charts":4,"./helpers/data/incrementAnimation":5,"./helpers/data/prettyNumber":6,"./helpers/data/swapText":7,"./helpers/data/toggleClasses":8,"./helpers/htmlToText":9}],3:[function(require,module,exports){
+},{"./ENV":1,"./helpers/data/charts":4,"./helpers/data/inViewAddClass":5,"./helpers/data/incrementAnimation":6,"./helpers/data/modal":7,"./helpers/data/prettyNumber":8,"./helpers/data/swapText":9,"./helpers/data/toggleClasses":10,"./helpers/htmlToText":11}],3:[function(require,module,exports){
 'use strict';
 
 // cbs should be an array of callbacks
@@ -219,7 +221,30 @@ var initCharts = function initCharts() {
 
 module.exports = initCharts;
 
-},{"../merge":10,"chart.js":14,"format-number":70}],5:[function(require,module,exports){
+},{"../merge":12,"chart.js":16,"format-number":72}],5:[function(require,module,exports){
+'use strict';
+
+var addScrollEvents = require('../addScrollEvents');
+var toggleInView = require('../toggleInView');
+
+var attr = 'data-in-view-add-class';
+
+var inViewAddClass = function inViewAddClass(elm, inView, i) {
+  var envKey = 'in_view_add_class_done_{i}';
+  window.ENV = window.ENV ? window.ENV : {};
+  if (!inView || window.ENV[envKey]) return;
+  window.ENV[envKey] = true;
+  var className = (elm.getAttribute(attr) || '').trim();
+  elm.classList.add(className);
+};
+
+module.exports = function () {
+  return addScrollEvents([function () {
+    return toggleInView('[' + attr + ']', inViewAddClass);
+  }]);
+};
+
+},{"../addScrollEvents":3,"../toggleInView":15}],6:[function(require,module,exports){
 'use strict';
 
 // adds commas to numbers
@@ -255,7 +280,8 @@ var incrementOnScroll = function incrementOnScroll() {
 };
 
 var incrementOnScrollCb = function incrementOnScrollCb(elm, inView, i) {
-  var envKey = 'increment_animation_running_' + i;
+  var envKey = 'increment_animation_done_' + i;
+
   window.ENV = window.ENV ? window.ENV : {};
 
   if (!inView || window.ENV[envKey]) return;
@@ -276,7 +302,40 @@ var incrementOnScrollCb = function incrementOnScrollCb(elm, inView, i) {
 
 module.exports = incrementOnScroll;
 
-},{"../addScrollEvents":3,"../toggleInView":13,"format-number":70}],6:[function(require,module,exports){
+},{"../addScrollEvents":3,"../toggleInView":15,"format-number":72}],7:[function(require,module,exports){
+'use strict';
+
+module.exports = function () {
+  openOrCloseModal({ open: true, attribute: 'data-open-modal' });
+  openOrCloseModal({ open: false, attribute: 'data-close-modal' });
+  var elms = document.querySelectorAll('[data-modal]');
+  elms.forEach(function (elm) {
+    if (!elm) return;
+    elm.addEventListener('click', function (ev) {
+      var target = ev.target;
+      if (!target.getAttribute('data-modal')) return;
+      target.setAttribute('data-modal-is-visible', false);
+    });
+  });
+};
+
+var openOrCloseModal = function openOrCloseModal(_ref) {
+  var open = _ref.open,
+      attribute = _ref.attribute;
+
+  var elms = document.querySelectorAll('[' + attribute + ']');
+  elms.forEach(function (elm) {
+    if (!elm) return;
+    elm.addEventListener('click', function (ev) {
+      var modalName = ev.target.getAttribute(attribute);
+      var modalElm = document.querySelector('[data-modal=' + modalName + ']');
+      if (!modalElm) return;
+      modalElm.setAttribute('data-modal-is-visible', open);
+    });
+  });
+};
+
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var prettyNumber = require('../prettyNumber');
@@ -296,7 +355,7 @@ var dataPrettyNumber = function dataPrettyNumber() {
 
 module.exports = dataPrettyNumber;
 
-},{"../prettyNumber":11}],7:[function(require,module,exports){
+},{"../prettyNumber":13}],9:[function(require,module,exports){
 'use strict';
 
 var style = require('../style');
@@ -358,7 +417,7 @@ var swapText = function swapText() {
 
 module.exports = swapText;
 
-},{"../style":12}],8:[function(require,module,exports){
+},{"../style":14}],10:[function(require,module,exports){
 'use strict';
 
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
@@ -411,7 +470,7 @@ module.exports = {
   dataToggleClassesTarget: dataToggleClassesTarget
 };
 
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 var htmlToText = function htmlToText() {
@@ -426,7 +485,7 @@ var htmlToText = function htmlToText() {
 
 module.exports = htmlToText;
 
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 var merge = function merge(obj, src) {
@@ -438,7 +497,7 @@ var merge = function merge(obj, src) {
 
 module.exports = merge;
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 var addCommas = require('format-number')();
@@ -459,7 +518,7 @@ var prettyNumber = function prettyNumber(num) {
 
 module.exports = prettyNumber;
 
-},{"format-number":70}],12:[function(require,module,exports){
+},{"format-number":72}],14:[function(require,module,exports){
 "use strict";
 
 var style = function style(elm) {
@@ -471,7 +530,7 @@ var style = function style(elm) {
 
 module.exports = style;
 
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 "use strict";
 
 // takes a selector and a callback that gets called
@@ -496,7 +555,7 @@ var findOffset = function findOffset(elm) {
 
 module.exports = toggleInView;
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 /**
  * @namespace Chart
  */
@@ -576,7 +635,7 @@ if (typeof window !== 'undefined') {
  */
 Chart.canvasHelpers = Chart.helpers.canvas;
 
-},{"./charts/Chart.Bar":15,"./charts/Chart.Bubble":16,"./charts/Chart.Doughnut":17,"./charts/Chart.Line":18,"./charts/Chart.PolarArea":19,"./charts/Chart.Radar":20,"./charts/Chart.Scatter":21,"./controllers/controller.bar":22,"./controllers/controller.bubble":23,"./controllers/controller.doughnut":24,"./controllers/controller.line":25,"./controllers/controller.polarArea":26,"./controllers/controller.radar":27,"./controllers/controller.scatter":28,"./core/core":36,"./core/core.animation":29,"./core/core.controller":30,"./core/core.datasetController":31,"./core/core.defaults":32,"./core/core.element":33,"./core/core.helpers":34,"./core/core.interaction":35,"./core/core.layoutService":37,"./core/core.plugin":38,"./core/core.scale":39,"./core/core.scaleService":40,"./core/core.tooltip":42,"./elements/index":47,"./helpers/index":52,"./platforms/platform":55,"./plugins/plugin.filler":56,"./plugins/plugin.legend":57,"./plugins/plugin.title":58,"./scales/scale.category":59,"./scales/scale.linear":60,"./scales/scale.linearbase":61,"./scales/scale.logarithmic":62,"./scales/scale.radialLinear":63,"./scales/scale.time":64}],15:[function(require,module,exports){
+},{"./charts/Chart.Bar":17,"./charts/Chart.Bubble":18,"./charts/Chart.Doughnut":19,"./charts/Chart.Line":20,"./charts/Chart.PolarArea":21,"./charts/Chart.Radar":22,"./charts/Chart.Scatter":23,"./controllers/controller.bar":24,"./controllers/controller.bubble":25,"./controllers/controller.doughnut":26,"./controllers/controller.line":27,"./controllers/controller.polarArea":28,"./controllers/controller.radar":29,"./controllers/controller.scatter":30,"./core/core":38,"./core/core.animation":31,"./core/core.controller":32,"./core/core.datasetController":33,"./core/core.defaults":34,"./core/core.element":35,"./core/core.helpers":36,"./core/core.interaction":37,"./core/core.layoutService":39,"./core/core.plugin":40,"./core/core.scale":41,"./core/core.scaleService":42,"./core/core.tooltip":44,"./elements/index":49,"./helpers/index":54,"./platforms/platform":57,"./plugins/plugin.filler":58,"./plugins/plugin.legend":59,"./plugins/plugin.title":60,"./scales/scale.category":61,"./scales/scale.linear":62,"./scales/scale.linearbase":63,"./scales/scale.logarithmic":64,"./scales/scale.radialLinear":65,"./scales/scale.time":66}],17:[function(require,module,exports){
 'use strict';
 
 module.exports = function(Chart) {
@@ -589,7 +648,7 @@ module.exports = function(Chart) {
 
 };
 
-},{}],16:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
 module.exports = function(Chart) {
@@ -601,7 +660,7 @@ module.exports = function(Chart) {
 
 };
 
-},{}],17:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 
 module.exports = function(Chart) {
@@ -614,7 +673,7 @@ module.exports = function(Chart) {
 
 };
 
-},{}],18:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 module.exports = function(Chart) {
@@ -627,7 +686,7 @@ module.exports = function(Chart) {
 
 };
 
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 module.exports = function(Chart) {
@@ -640,7 +699,7 @@ module.exports = function(Chart) {
 
 };
 
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 module.exports = function(Chart) {
@@ -653,7 +712,7 @@ module.exports = function(Chart) {
 
 };
 
-},{}],21:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 
 module.exports = function(Chart) {
@@ -663,7 +722,7 @@ module.exports = function(Chart) {
 	};
 };
 
-},{}],22:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 'use strict';
 
 var defaults = require('../core/core.defaults');
@@ -1086,7 +1145,7 @@ module.exports = function(Chart) {
 	});
 };
 
-},{"../core/core.defaults":32,"../elements/index":47,"../helpers/index":52}],23:[function(require,module,exports){
+},{"../core/core.defaults":34,"../elements/index":49,"../helpers/index":54}],25:[function(require,module,exports){
 'use strict';
 
 var defaults = require('../core/core.defaults');
@@ -1268,7 +1327,7 @@ module.exports = function(Chart) {
 	});
 };
 
-},{"../core/core.defaults":32,"../elements/index":47,"../helpers/index":52}],24:[function(require,module,exports){
+},{"../core/core.defaults":34,"../elements/index":49,"../helpers/index":54}],26:[function(require,module,exports){
 'use strict';
 
 var defaults = require('../core/core.defaults');
@@ -1569,7 +1628,7 @@ module.exports = function(Chart) {
 	});
 };
 
-},{"../core/core.defaults":32,"../elements/index":47,"../helpers/index":52}],25:[function(require,module,exports){
+},{"../core/core.defaults":34,"../elements/index":49,"../helpers/index":54}],27:[function(require,module,exports){
 'use strict';
 
 var defaults = require('../core/core.defaults');
@@ -1904,7 +1963,7 @@ module.exports = function(Chart) {
 	});
 };
 
-},{"../core/core.defaults":32,"../elements/index":47,"../helpers/index":52}],26:[function(require,module,exports){
+},{"../core/core.defaults":34,"../elements/index":49,"../helpers/index":54}],28:[function(require,module,exports){
 'use strict';
 
 var defaults = require('../core/core.defaults');
@@ -2128,7 +2187,7 @@ module.exports = function(Chart) {
 	});
 };
 
-},{"../core/core.defaults":32,"../elements/index":47,"../helpers/index":52}],27:[function(require,module,exports){
+},{"../core/core.defaults":34,"../elements/index":49,"../helpers/index":54}],29:[function(require,module,exports){
 'use strict';
 
 var defaults = require('../core/core.defaults');
@@ -2298,7 +2357,7 @@ module.exports = function(Chart) {
 	});
 };
 
-},{"../core/core.defaults":32,"../elements/index":47,"../helpers/index":52}],28:[function(require,module,exports){
+},{"../core/core.defaults":34,"../elements/index":49,"../helpers/index":54}],30:[function(require,module,exports){
 'use strict';
 
 var defaults = require('../core/core.defaults');
@@ -2342,7 +2401,7 @@ module.exports = function(Chart) {
 
 };
 
-},{"../core/core.defaults":32}],29:[function(require,module,exports){
+},{"../core/core.defaults":34}],31:[function(require,module,exports){
 /* global window: false */
 'use strict';
 
@@ -2516,7 +2575,7 @@ module.exports = function(Chart) {
 
 };
 
-},{"../helpers/index":52,"./core.defaults":32,"./core.element":33}],30:[function(require,module,exports){
+},{"../helpers/index":54,"./core.defaults":34,"./core.element":35}],32:[function(require,module,exports){
 'use strict';
 
 var defaults = require('./core.defaults');
@@ -3422,7 +3481,7 @@ module.exports = function(Chart) {
 	Chart.Controller = Chart;
 };
 
-},{"../helpers/index":52,"../platforms/platform":55,"./core.defaults":32,"./core.interaction":35}],31:[function(require,module,exports){
+},{"../helpers/index":54,"../platforms/platform":57,"./core.defaults":34,"./core.interaction":37}],33:[function(require,module,exports){
 'use strict';
 
 var helpers = require('../helpers/index');
@@ -3754,7 +3813,7 @@ module.exports = function(Chart) {
 	Chart.DatasetController.extend = helpers.inherits;
 };
 
-},{"../helpers/index":52}],32:[function(require,module,exports){
+},{"../helpers/index":54}],34:[function(require,module,exports){
 'use strict';
 
 var helpers = require('../helpers/index');
@@ -3768,7 +3827,7 @@ module.exports = {
 	}
 };
 
-},{"../helpers/index":52}],33:[function(require,module,exports){
+},{"../helpers/index":54}],35:[function(require,module,exports){
 'use strict';
 
 var color = require('chartjs-color');
@@ -3885,7 +3944,7 @@ Element.extend = helpers.inherits;
 
 module.exports = Element;
 
-},{"../helpers/index":52,"chartjs-color":66}],34:[function(require,module,exports){
+},{"../helpers/index":54,"chartjs-color":68}],36:[function(require,module,exports){
 /* global window: false */
 /* global document: false */
 'use strict';
@@ -4490,7 +4549,7 @@ module.exports = function(Chart) {
 	};
 };
 
-},{"../helpers/index":52,"./core.defaults":32,"chartjs-color":66}],35:[function(require,module,exports){
+},{"../helpers/index":54,"./core.defaults":34,"chartjs-color":68}],37:[function(require,module,exports){
 'use strict';
 
 var helpers = require('../helpers/index');
@@ -4822,7 +4881,7 @@ module.exports = {
 	}
 };
 
-},{"../helpers/index":52}],36:[function(require,module,exports){
+},{"../helpers/index":54}],38:[function(require,module,exports){
 'use strict';
 
 var defaults = require('./core.defaults');
@@ -4873,7 +4932,7 @@ module.exports = function() {
 	return Chart;
 };
 
-},{"./core.defaults":32}],37:[function(require,module,exports){
+},{"./core.defaults":34}],39:[function(require,module,exports){
 'use strict';
 
 var helpers = require('../helpers/index');
@@ -5297,7 +5356,7 @@ module.exports = function(Chart) {
 	};
 };
 
-},{"../helpers/index":52}],38:[function(require,module,exports){
+},{"../helpers/index":54}],40:[function(require,module,exports){
 'use strict';
 
 var defaults = require('./core.defaults');
@@ -5694,7 +5753,7 @@ module.exports = function(Chart) {
 	Chart.PluginBase = Element.extend({});
 };
 
-},{"../helpers/index":52,"./core.defaults":32,"./core.element":33}],39:[function(require,module,exports){
+},{"../helpers/index":54,"./core.defaults":34,"./core.element":35}],41:[function(require,module,exports){
 'use strict';
 
 var defaults = require('./core.defaults');
@@ -6627,7 +6686,7 @@ module.exports = function(Chart) {
 	});
 };
 
-},{"../helpers/index":52,"./core.defaults":32,"./core.element":33,"./core.ticks":41}],40:[function(require,module,exports){
+},{"../helpers/index":54,"./core.defaults":34,"./core.element":35,"./core.ticks":43}],42:[function(require,module,exports){
 'use strict';
 
 var defaults = require('./core.defaults');
@@ -6674,7 +6733,7 @@ module.exports = function(Chart) {
 	};
 };
 
-},{"../helpers/index":52,"./core.defaults":32}],41:[function(require,module,exports){
+},{"../helpers/index":54,"./core.defaults":34}],43:[function(require,module,exports){
 'use strict';
 
 var helpers = require('../helpers/index');
@@ -6880,7 +6939,7 @@ module.exports = {
 	}
 };
 
-},{"../helpers/index":52}],42:[function(require,module,exports){
+},{"../helpers/index":54}],44:[function(require,module,exports){
 'use strict';
 
 var defaults = require('./core.defaults');
@@ -7830,7 +7889,7 @@ module.exports = function(Chart) {
 	};
 };
 
-},{"../helpers/index":52,"./core.defaults":32,"./core.element":33}],43:[function(require,module,exports){
+},{"../helpers/index":54,"./core.defaults":34,"./core.element":35}],45:[function(require,module,exports){
 'use strict';
 
 var defaults = require('../core/core.defaults');
@@ -7939,7 +7998,7 @@ module.exports = Element.extend({
 	}
 });
 
-},{"../core/core.defaults":32,"../core/core.element":33,"../helpers/index":52}],44:[function(require,module,exports){
+},{"../core/core.defaults":34,"../core/core.element":35,"../helpers/index":54}],46:[function(require,module,exports){
 'use strict';
 
 var defaults = require('../core/core.defaults');
@@ -8032,7 +8091,7 @@ module.exports = Element.extend({
 	}
 });
 
-},{"../core/core.defaults":32,"../core/core.element":33,"../helpers/index":52}],45:[function(require,module,exports){
+},{"../core/core.defaults":34,"../core/core.element":35,"../helpers/index":54}],47:[function(require,module,exports){
 'use strict';
 
 var defaults = require('../core/core.defaults');
@@ -8140,7 +8199,7 @@ module.exports = Element.extend({
 	}
 });
 
-},{"../core/core.defaults":32,"../core/core.element":33,"../helpers/index":52}],46:[function(require,module,exports){
+},{"../core/core.defaults":34,"../core/core.element":35,"../helpers/index":54}],48:[function(require,module,exports){
 'use strict';
 
 var defaults = require('../core/core.defaults');
@@ -8359,7 +8418,7 @@ module.exports = Element.extend({
 	}
 });
 
-},{"../core/core.defaults":32,"../core/core.element":33}],47:[function(require,module,exports){
+},{"../core/core.defaults":34,"../core/core.element":35}],49:[function(require,module,exports){
 'use strict';
 
 module.exports = {};
@@ -8368,7 +8427,7 @@ module.exports.Line = require('./element.line');
 module.exports.Point = require('./element.point');
 module.exports.Rectangle = require('./element.rectangle');
 
-},{"./element.arc":43,"./element.line":44,"./element.point":45,"./element.rectangle":46}],48:[function(require,module,exports){
+},{"./element.arc":45,"./element.line":46,"./element.point":47,"./element.rectangle":48}],50:[function(require,module,exports){
 'use strict';
 
 var helpers = require('./helpers.core');
@@ -8584,7 +8643,7 @@ helpers.drawRoundedRectangle = function(ctx) {
 	ctx.closePath();
 };
 
-},{"./helpers.core":49}],49:[function(require,module,exports){
+},{"./helpers.core":51}],51:[function(require,module,exports){
 'use strict';
 
 /**
@@ -8925,7 +8984,7 @@ helpers.getValueOrDefault = helpers.valueOrDefault;
  */
 helpers.getValueAtIndexOrDefault = helpers.valueAtIndexOrDefault;
 
-},{}],50:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 'use strict';
 
 var helpers = require('./helpers.core');
@@ -9177,7 +9236,7 @@ module.exports = {
  */
 helpers.easingEffects = effects;
 
-},{"./helpers.core":49}],51:[function(require,module,exports){
+},{"./helpers.core":51}],53:[function(require,module,exports){
 'use strict';
 
 var helpers = require('./helpers.core');
@@ -9275,7 +9334,7 @@ module.exports = {
 	}
 };
 
-},{"./helpers.core":49}],52:[function(require,module,exports){
+},{"./helpers.core":51}],54:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./helpers.core');
@@ -9283,7 +9342,7 @@ module.exports.easing = require('./helpers.easing');
 module.exports.canvas = require('./helpers.canvas');
 module.exports.options = require('./helpers.options');
 
-},{"./helpers.canvas":48,"./helpers.core":49,"./helpers.easing":50,"./helpers.options":51}],53:[function(require,module,exports){
+},{"./helpers.canvas":50,"./helpers.core":51,"./helpers.easing":52,"./helpers.options":53}],55:[function(require,module,exports){
 /**
  * Platform fallback implementation (minimal).
  * @see https://github.com/chartjs/Chart.js/pull/4591#issuecomment-319575939
@@ -9300,7 +9359,7 @@ module.exports = {
 	}
 };
 
-},{}],54:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 /**
  * Chart.Platform implementation for targeting a web browser
  */
@@ -9759,7 +9818,7 @@ helpers.addEvent = addEventListener;
  */
 helpers.removeEvent = removeEventListener;
 
-},{"../helpers/index":52}],55:[function(require,module,exports){
+},{"../helpers/index":54}],57:[function(require,module,exports){
 'use strict';
 
 var helpers = require('../helpers/index');
@@ -9835,7 +9894,7 @@ module.exports = helpers.extend({
  * @prop {Number} y - The mouse y position, relative to the canvas (null for incompatible events)
  */
 
-},{"../helpers/index":52,"./platform.basic":53,"./platform.dom":54}],56:[function(require,module,exports){
+},{"../helpers/index":54,"./platform.basic":55,"./platform.dom":56}],58:[function(require,module,exports){
 /**
  * Plugin based on discussion from the following Chart.js issues:
  * @see https://github.com/chartjs/Chart.js/issues/2380#issuecomment-279961569
@@ -10158,7 +10217,7 @@ module.exports = function() {
 	};
 };
 
-},{"../core/core.defaults":32,"../elements/index":47,"../helpers/index":52}],57:[function(require,module,exports){
+},{"../core/core.defaults":34,"../elements/index":49,"../helpers/index":54}],59:[function(require,module,exports){
 'use strict';
 
 var defaults = require('../core/core.defaults');
@@ -10727,7 +10786,7 @@ module.exports = function(Chart) {
 	};
 };
 
-},{"../core/core.defaults":32,"../core/core.element":33,"../helpers/index":52}],58:[function(require,module,exports){
+},{"../core/core.defaults":34,"../core/core.element":35,"../helpers/index":54}],60:[function(require,module,exports){
 'use strict';
 
 var defaults = require('../core/core.defaults');
@@ -10972,7 +11031,7 @@ module.exports = function(Chart) {
 	};
 };
 
-},{"../core/core.defaults":32,"../core/core.element":33,"../helpers/index":52}],59:[function(require,module,exports){
+},{"../core/core.defaults":34,"../core/core.element":35,"../helpers/index":54}],61:[function(require,module,exports){
 'use strict';
 
 module.exports = function(Chart) {
@@ -11107,7 +11166,7 @@ module.exports = function(Chart) {
 
 };
 
-},{}],60:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 'use strict';
 
 var defaults = require('../core/core.defaults');
@@ -11301,7 +11360,7 @@ module.exports = function(Chart) {
 
 };
 
-},{"../core/core.defaults":32,"../core/core.ticks":41,"../helpers/index":52}],61:[function(require,module,exports){
+},{"../core/core.defaults":34,"../core/core.ticks":43,"../helpers/index":54}],63:[function(require,module,exports){
 'use strict';
 
 var helpers = require('../helpers/index');
@@ -11435,7 +11494,7 @@ module.exports = function(Chart) {
 	});
 };
 
-},{"../core/core.ticks":41,"../helpers/index":52}],62:[function(require,module,exports){
+},{"../core/core.ticks":43,"../helpers/index":54}],64:[function(require,module,exports){
 'use strict';
 
 var helpers = require('../helpers/index');
@@ -11681,7 +11740,7 @@ module.exports = function(Chart) {
 
 };
 
-},{"../core/core.ticks":41,"../helpers/index":52}],63:[function(require,module,exports){
+},{"../core/core.ticks":43,"../helpers/index":54}],65:[function(require,module,exports){
 'use strict';
 
 var defaults = require('../core/core.defaults');
@@ -12213,7 +12272,7 @@ module.exports = function(Chart) {
 
 };
 
-},{"../core/core.defaults":32,"../core/core.ticks":41,"../helpers/index":52}],64:[function(require,module,exports){
+},{"../core/core.defaults":34,"../core/core.ticks":43,"../helpers/index":54}],66:[function(require,module,exports){
 /* global window: false */
 'use strict';
 
@@ -12971,7 +13030,7 @@ module.exports = function(Chart) {
 	Chart.scaleService.registerScaleType('time', TimeScale, defaultConfig);
 };
 
-},{"../core/core.defaults":32,"../helpers/index":52,"moment":71}],65:[function(require,module,exports){
+},{"../core/core.defaults":34,"../helpers/index":54,"moment":73}],67:[function(require,module,exports){
 /* MIT license */
 var colorNames = require('color-name');
 
@@ -13194,7 +13253,7 @@ for (var name in colorNames) {
    reverseNames[colorNames[name]] = name;
 }
 
-},{"color-name":69}],66:[function(require,module,exports){
+},{"color-name":71}],68:[function(require,module,exports){
 /* MIT license */
 var convert = require('color-convert');
 var string = require('chartjs-color-string');
@@ -13681,7 +13740,7 @@ if (typeof window !== 'undefined') {
 
 module.exports = Color;
 
-},{"chartjs-color-string":65,"color-convert":68}],67:[function(require,module,exports){
+},{"chartjs-color-string":67,"color-convert":70}],69:[function(require,module,exports){
 /* MIT license */
 
 module.exports = {
@@ -14381,7 +14440,7 @@ for (var key in cssKeywords) {
   reverseKeywords[JSON.stringify(cssKeywords[key])] = key;
 }
 
-},{}],68:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 var conversions = require("./conversions");
 
 var convert = function() {
@@ -14474,7 +14533,7 @@ Converter.prototype.getValues = function(space) {
 });
 
 module.exports = convert;
-},{"./conversions":67}],69:[function(require,module,exports){
+},{"./conversions":69}],71:[function(require,module,exports){
 'use strict'
 
 module.exports = {
@@ -14628,7 +14687,7 @@ module.exports = {
 	"yellowgreen": [154, 205, 50]
 };
 
-},{}],70:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 
 module.exports = formatter;
 module.exports.default = formatter;
@@ -14886,7 +14945,7 @@ function round(number, places) {
   return number;
 }
 
-},{}],71:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 //! moment.js
 //! version : 2.18.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors

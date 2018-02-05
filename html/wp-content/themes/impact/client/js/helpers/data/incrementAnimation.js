@@ -29,7 +29,8 @@ const incrementOnScroll = () =>
   ])
 
 const incrementOnScrollCb = (elm, inView, i) => {
-  const envKey = `increment_animation_running_${i}`
+  const envKey = `increment_animation_done_${i}`
+
   window.ENV = window.ENV ? window.ENV : {}
 
   if (!inView || window.ENV[envKey]) return
