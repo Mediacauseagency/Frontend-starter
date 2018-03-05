@@ -8,7 +8,7 @@
 2. Start up the virtual box by running `vagrant up` (this will take a while, especially the first time).
 3. Populate the virtual box database:
   - Have someone who has access to the server that you will be SSH-ing into (usually the staging server) grant you SSH access and give you your SSH username
-  - Add your SSH private key to the ssh-agent and store your passphrase in the keychain: `ssh_add -K ~/.ssh/id_rsa`
+  - Add your SSH private key to the ssh-agent and store your passphrase in the keychain: `ssh-add -K ~/.ssh/id_rsa`
   - SSH into the virtual box: `vagrant ssh`
   - cd into the root directory of the project: `cd /var/www`
   - create a txt file with your SSH username: `echo 'username=[your SSH username]' > env.txt`
