@@ -31,30 +31,12 @@ It can be a good idea to periodically update the database:
 5. When you are done developing, run `npm run build`. This will minify and gzip your CSS and JS and make it production-ready.
 
 ### CSS
-- we are using a custom build of [tachyons](http://tachyons.io/) as our css toolkit - the custom build excludes any rules related to debugging, colors, and font-families
+- we are using node-sass to compile our .scss files
+- we are using a custom build of [tachyons](http://tachyons.io/) as our css toolkit 
 - use flexbox over floats when possible
 - avoid nesting
 - avoid `important!`
 - use `rem`s or `em`s over pixels when possible
-- we are including a handful of postcss plugins, such as `postcss-each` (see `postcss.config.js` for a full list)
-- here is an example of using `postcss-each`'s looping functionality to construct a bunch of brand color related utility classes:
-
-```css
-:root {
-  --khaki: #E2E5D0; 
-  --khaki-light: color(var(--khaki) l(80%));
-  --green: #39f5ca;
-  --orange: #F95607;
-}
-
-@each $color in (khaki, khaki-light, green, orange) {
-  .bg-$(color) { background-color: var(--$(color)); }
-  .hover-bg-$(color):hover { background-color: var(--$(color)); }
-  .color-$(color) { color: var(--$(color)); }
-  .hover-color-$(color):hover { color: var(--$(color)); }
-  .border-$(color) { border-color: var(--$(color)); }
-}
-```
 
 ### JS
 - we are using [browserify](https://github.com/browserify/browserify#usage) for requiring files
@@ -63,17 +45,6 @@ It can be a good idea to periodically update the database:
 
 ### Fonts and other assets
 - fonts, UI icons and other assets should live in the `../assets` directory
-- the assets path is [set in postcss](https://github.com/Mediacauseagency/wp-starter/blob/master/html/wp-content/themes/impact/client/postcss.config.js) to point to `../assets`, so when accessing assets from CSS you can just do:
-
-```css
-@font-face {
-  /* we can assume that we are in '../assets' */
-  src:  url('fonts/Poppins/Poppins-Regular.ttf') format('truetype');
-  font-family: 'Poppins';
-}
-
-body { font-family: 'Poppins'; }
-```
 
 ### Demo
 To edit the demo, run `npm run watch-demo` from the `client` folder.

@@ -6,7 +6,7 @@ module.exports = () => {
     if (!elm) return
     elm.addEventListener('click', (ev) => {
       const target = ev.target
-      if (!target.getAttribute('data-modal')) return 
+      if (!target.getAttribute('data-modal')) return
       target.setAttribute('data-modal-is-visible', false)
     })
   })
