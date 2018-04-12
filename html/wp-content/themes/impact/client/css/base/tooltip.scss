@@ -1,4 +1,4 @@
-@import 'data-tooltip'; /* npm */
+@import '../client/node_modules/data-tooltip/index.css'; /* npm */
 
 [class*=tooltip--]:before, 
 [class*=tooltip--]:after {

@@ -2,12 +2,10 @@
 /* font family files should live in impact/assets/fonts */
 /* make sure to use the system font fallbacks */
 
-:root {
-  --system-sans: -apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,ubuntu,roboto,noto,segoe ui,arial,sans-serif;
-  --system-serif: georgia, times, serif;
-  --system-mono: Consolas, monaco, monospace;
-  --poppins: Poppins, var(--system-sans);
-}
+$system-sans: -apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,ubuntu,roboto,noto,segoe ui,arial,sans-serif;
+$system-serif: georgia, times, serif;
+$system-mono: Consolas, monaco, monospace;
+$poppins: Poppins, $system-sans;
 
 @font-face {
   font-family: 'Poppins';
@@ -30,7 +28,9 @@ html {
 .code,
 code,
 pre {
-  font-family: var(--system-mono);
+  font-family: $system-mono;
 }
 
-body { font-family: var(--system-sans); }
+body { 
+  font-family: $poppins;
+}
