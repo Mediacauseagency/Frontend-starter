@@ -5,7 +5,8 @@ You should require this file at the top of your js file.
 
 # Charts
 You can generate line, bar and pie charts by passing in JSON data to a canvas element's `data-chart-data` attribute. 
-Be sure to require the `charts.js` file and call it:
+
+### JS
 ```js
 require('./helpers/data/charts')()
 ```
@@ -19,7 +20,7 @@ window.ENV = {
 }
 ```
 
-### Example HTML
+### HTML
 ```html
 <!-- line -->
 <canvas data-chart='line' data-chart-data='{
@@ -64,7 +65,12 @@ window.ENV = {
 # Pretty number
 This helper is meant for displaying large numbers (>= 1000) in a readable way. You can add prefixes and suffixes too.
 
-### Example HTML
+### JS
+```js
+require('./helpers/data/prettyNumber')()
+```
+
+### HTML
 ```html
 <h3 data-pretty-number='244'></h3>
 <h3 data-pretty-number='1234'></h3>
