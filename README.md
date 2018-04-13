@@ -24,24 +24,23 @@ It can be a good idea to periodically update the database:
 
 ### Getting started
 
-1. All of the frontend code lives in `html/wp-content/themes/impact/client`, so first you'll want to `cd` into that directory.
+1. All of the JS and CSS lives in `html/wp-content/themes/impact/client`, so first you'll want to `cd` into that directory.
 2. We are using node to run our various compiling processes for both JS and CSS. So first of all, make sure you have node installed globally on your machine.
 3. Now that you have node installed, you can run `npm install`, which will install all of the packages listed in `package.json` and save them to the `node_modules` directory.
-4. To start developing, run `npm run watch` from your terminal. This will watch for changes in `js/index.js` and `css/index.css` and compile and write them to `../assets/build.js` and `../assets/build.css`. You can also just run `npm run watch-css` or `npm run watch-js`. If your CSS and JS aren't compiling, check the logs from the watch script for any errors.
+4. To start developing, run `npm run watch` from your terminal. This will watch for changes in `js/index.js` and `css/index.scss` and compile and write them to `../assets/build.js` and `../assets/build.css`. You can also just run `npm run watch-css` or `npm run watch-js`. If your CSS and JS aren't compiling, check the logs from the watch script for any errors.
 5. When you are done developing, run `npm run build`. This will minify and gzip your CSS and JS and make it production-ready.
 
 ### CSS
 - we are using node-sass to compile our .scss files
-- we are using a custom build of [tachyons](http://tachyons.io/) as our css toolkit 
+- we are using [tachyons-sass](http://tachyons.io/) as our css toolkit 
 - use flexbox over floats when possible
 - avoid nesting
 - avoid `important!`
 - use `rem`s or `em`s over pixels when possible
 
 ### JS
-- we are using [browserify](https://github.com/browserify/browserify#usage) for requiring files
+- we are using [browserify](https://github.com/browserify/browserify#usage) for compiling required files
 - es6 syntax is supported
-- try to make your code as modular as possible
 
 ### Fonts and other assets
 - fonts, UI icons and other assets should live in the `../assets` directory
@@ -66,4 +65,17 @@ When you are ready to publish the demo page, follow these steps:
   - `git push`
 
 Your demo page should now be viewable at `https://mediacauseagency.github.io/[REPO NAME]`.
+
+
+### Data attributes
+There are a handful of JS and CSS features that are prebuilt and that can be accessed through HTML data attributes:
+- Charts
+- Pretty number
+- Toggle classes
+- Swap text
+- Increment animation
+- In view add class
+- Tooltip
+- Modal
+
 
