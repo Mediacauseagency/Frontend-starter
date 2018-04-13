@@ -5,7 +5,7 @@ You should require this file at the top of your js file.
 
 # Charts
 You can generate line, bar and pie charts by passing in JSON data to a canvas element's `data-chart-data` attribute. 
-You can update these values for all of your charts from the `ENV.js` file:
+You can update styles for all of your charts from the `ENV.js` file:
 ```js
 window.ENV = {
   chartColors: ['pink', '#eeeee', 'rgba(0,0,0,1)'],
@@ -108,13 +108,12 @@ This will increment and format (adds commas) a number from 0, when the element i
 
 # In view add class
 This simply adds a class to the element when it is in view (good for animations).
-```
 ```html
 <div class='f-6' data-in-view-add-class='my-fancy-animation'>🤔</div>
 ```
 
 # Modal
-Use `data-modal` to define your modal, and `data-modal-open`, and `data-modal-close` to open/close your modal.
+Use `data-modal` to define your modal, and `data-modal-open`, and `data-modal-close` to open/close your modal. Be sure to give your modal a unique name.
 ```html
 <button data-open-modal='demo-modal'>Open modal</button>
 <div data-modal='demo-modal'>
