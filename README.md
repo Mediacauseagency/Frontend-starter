@@ -68,14 +68,5 @@ Your demo page should now be viewable at `https://mediacauseagency.github.io/[RE
 
 
 ### Data attributes
-There are a handful of JS and CSS features that are prebuilt and that can be accessed through HTML data attributes:
-- Charts
-- Pretty number
-- Toggle classes
-- Swap text
-- Increment animation
-- In view add class
-- Tooltip
-- Modal
-
+There are a handful of JS and CSS features that are prebuilt and that can be accessed through HTML data attributes. [Here are some docs](/data-attribute-helpers.md).
 
