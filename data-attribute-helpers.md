@@ -60,3 +60,24 @@ window.ENV = {
   "data":["2345","3423", "4523", "1345"]
 }'></canvas>
 ```
+
+# Pretty number
+This helper is meant for displaying large numbers (>= 1000) in a readable way. You can add prefixes and suffixes too.
+
+### Example HTML
+```html
+<h3 data-pretty-number='244'></h3>
+<h3 data-pretty-number='1234'></h3>
+<h3 data-pretty-number='73692'></h3>
+<h3 data-pretty-number='854934' data-pretty-number-prefix='$'></h3>
+<h3 data-pretty-number='234987252' data-pretty-number-suffix='🔥'></h3>
+```
+will result in:
+#### 244
+#### 1,234
+#### 73.7K
+#### $854.9K
+#### 235M🔥
+
+
+
