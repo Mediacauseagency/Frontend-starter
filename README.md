@@ -42,6 +42,9 @@ It can be a good idea to periodically update the database:
 - we are using [browserify](https://github.com/browserify/browserify#usage) for compiling required files
 - es6 syntax is supported
 
+### Data attribute helpers
+There are a handful of JS and CSS features/utilities that are prebuilt and that can be accessed through plain HTML data attributes. [Here are some docs](/data-attribute-helpers.md).
+
 ### Fonts and other assets
 - fonts, UI icons and other assets should live in the `../assets` directory
 
@@ -65,8 +68,3 @@ When you are ready to publish the demo page, follow these steps:
   - `git push`
 
 Your demo page should now be viewable at `https://mediacauseagency.github.io/[REPO NAME]`.
-
-
-### Data attributes
-There are a handful of JS and CSS features that are prebuilt and that can be accessed through HTML data attributes. [Here are some docs](/data-attribute-helpers.md).
-
