@@ -37,7 +37,7 @@ const swapText = () => {
   elms.forEach((elm) => {
     let i = 0
     const text = (elm.getAttribute('data-swap-text') || '')
-      .split(/\.|,/)
+      .split(/\|/) // delimiter is '|' character
       .filter(Boolean)
       .map(s => s.trim())
     const longest = text.reduce((longest, current) =>

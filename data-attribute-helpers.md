@@ -5,9 +5,6 @@ You should require this file at the top of your js file.
 
 # Charts
 You can generate line, bar and pie charts by passing in JSON data to a canvas element's `data-chart-data` attribute. 
-```js
-require('./helpers/data/charts')()
-```
 You can update these values for all of your charts from the `ENV.js` file:
 ```js
 window.ENV = {
@@ -61,9 +58,6 @@ window.ENV = {
 
 # Pretty number
 This helper is meant for displaying large numbers (>= 1000) in a readable way. You can add prefixes and suffixes too.
-```js
-require('./helpers/data/prettyNumber')()
-```
 ```html
 <h3 data-pretty-number='244'></h3>
 <h3 data-pretty-number='1234'></h3>
@@ -81,20 +75,13 @@ $854.9K</br>
 
 # Toggle classes (self)
 This will toggle the classes that are in the data attribute for the element.
-```js
-require('./helpers/data/toggleClasses').dataToggleClassesSelf()
-```
-```
+```html
 <a href='#' data-toggle-classes-self='color-red strike'>Click me!</a>
 ```
 
-
 # Toggle classes (target)
 This will toggle the classes that are in the data attribute for a target.
-```js
-require('./helpers/data/toggleClasses').dataToggleClassesTarget()
-```
-```
+```html
 <a href='#' data-toggle-classes-target='#js-toggle-classes-target color-red ttu'>
   Click me!
 </a>
@@ -104,20 +91,14 @@ require('./helpers/data/toggleClasses').dataToggleClassesTarget()
 
 # Swap text
 This will cycle through a list (string separated by `|`s) and display each item for either 2000 ms or a provided timeout value.
-```js
-require('./helpers/data/swapText')()
-```
 ```html
 <p class='f3' data-swap-text='Don Quixote by Miguel de Cervantes | In Search of Lost Time by Marcel Proust | Ulysses by James Joyce | The Odyssey by Homer' data-swap-text-timeout='3000'>
 </p>
 ```
-      
-      
+
+
 # Increment
 This will increment and format (adds commas) a number from 0, when the element is in view.
-```js
-require('./helpers/data/incrementAnimation')()
-```
 ```html
 <h2 class='code' data-increment='34562'></h2>
 <h2 class='code' data-increment='1834523' data-increment-prefix='$'></h2>
@@ -127,8 +108,6 @@ require('./helpers/data/incrementAnimation')()
 
 # In view add class
 This simply adds a class to the element when it is in view (good for animations).
-```js
-require('./helpers/data/inViewAddClass')()
 ```
 ```html
 <div class='f-6' data-in-view-add-class='my-fancy-animation'>🤔</div>
@@ -136,10 +115,6 @@ require('./helpers/data/inViewAddClass')()
 
 # Modal
 Use `data-modal` to define your modal, and `data-modal-open`, and `data-modal-close` to open/close your modal.
-
-```js
-require('./helpers/data/modal')()
-```
 ```html
 <button data-open-modal='demo-modal'>Open modal</button>
 <div data-modal='demo-modal'>
@@ -152,9 +127,6 @@ require('./helpers/data/modal')()
 
 # Lazy image
 If you have a large image that you don't want blocking page load, you can load it lazily. Once the image has been loaded in the background, it will update the element's `src`.
-```js
-require('./helpers/data/lazyImage')()
-```
 ```html
 <img data-lazy-image='https://c402277.ssl.cf1.rackcdn.com/photos/11551/images/hero_full/Bernard_de_wetter_wwf_canon_113974.jpg?1462218465'/>
 ```

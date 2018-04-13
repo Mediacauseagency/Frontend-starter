@@ -1,12 +1,2 @@
-require('./ENV')
-require('./helpers/data/charts')()
+require('./index')
 require('./helpers/htmlToText')()
-require('./helpers/data/prettyNumber')()
-require('./helpers/data/swapText')()
-require('./helpers/data/incrementAnimation')()
-require('./helpers/data/inViewAddClass')()
-require('./helpers/data/modal')()
-const {dataToggleClassesSelf, dataToggleClassesTarget} = require('./helpers/data/toggleClasses')
-
-dataToggleClassesSelf()
-dataToggleClassesTarget()

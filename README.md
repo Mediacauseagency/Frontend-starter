@@ -43,7 +43,7 @@ It can be a good idea to periodically update the database:
 - es6 syntax is supported
 
 ### Data attribute helpers
-There are a handful of JS and CSS features/utilities that are prebuilt and that can be accessed through plain HTML data attributes. [Here are some docs](/data-attribute-helpers.md).
+There are a handful of JS and CSS features/utilities that are included and that can be accessed through plain HTML data attributes. [Here are some docs](/data-attribute-helpers.md).
 
 ### Fonts and other assets
 - fonts, UI icons and other assets should live in the `../assets` directory
