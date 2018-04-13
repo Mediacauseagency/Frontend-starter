@@ -150,6 +150,15 @@ require('./helpers/data/modal')()
 </div>
 ```
 
+# Lazy image
+If you have a large image that you don't want blocking page load, you can load it lazily. Once the image has been loaded in the background, it will update the element's `src`.
+```js
+require('./helpers/data/lazyImage')()
+```
+```html
+<img data-lazy-image='https://c402277.ssl.cf1.rackcdn.com/photos/11551/images/hero_full/Bernard_de_wetter_wwf_canon_113974.jpg?1462218465'/>
+```
+
 # Tooltips
 No JS needed. 
 ```html
