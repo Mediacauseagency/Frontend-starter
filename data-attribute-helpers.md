@@ -78,12 +78,56 @@ require('./helpers/data/prettyNumber')()
 <h3 data-pretty-number='854934' data-pretty-number-prefix='$'></h3>
 <h3 data-pretty-number='234987252' data-pretty-number-suffix='🔥'></h3>
 ```
-will result in:
-#### 244
-#### 1,234
-#### 73.7K
-#### $854.9K
-#### 235M🔥
+will result in:</br>
 
+244</br>
+1,234</br>
+73.7K</br>
+$854.9K</br>
+235M🔥</br>
 
+# Toggle classes (self)
+This will toggle the classes that are in the data attribute for the element.
+
+### JS
+```js
+require('./helpers/data/toggleClasses').dataToggleClassesSelf()
+```
+
+### HTML
+```
+<a href='#' data-toggle-classes-self='color-red strike'>Click me!</a>
+
+```
+
+# Toggle classes (target)
+This will toggle the classes that are in the data attribute for a target.
+
+### JS
+```js
+require('./helpers/data/toggleClasses').dataToggleClassesTarget()
+```
+
+### HTML
+```
+<a href='#' data-toggle-classes-target='#js-toggle-classes-target color-red ttu'>
+  Click me!
+</a>
+<h1 id='js-toggle-classes-target'>Aloha</h1>
+```
+### Swap text
+This will cycle through a list (string separated by `|`s) and display each item for either 2000 ms or a provided timeout value.
+
+### JS
+
+```js
+require('./helpers/data/swapText')()
+```
+
+### HTML
+```html
+<p class='f3' data-swap-text='Don Quixote by Miguel de Cervantes | In Search of Lost Time by Marcel Proust | Ulysses by James Joyce | The Odyssey by Homer' data-swap-text-timeout='3000'>
+</p>
+```
+      
 
