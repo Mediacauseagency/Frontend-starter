@@ -80,7 +80,7 @@ This will toggle the classes that are in the data attribute for the element.
 ```
 
 # Toggle classes (target)
-This will toggle the classes that are in the data attribute for a target.
+This will toggle the classes for a target. The first argument is the selector of the target and the following are the classes.
 ```html
 <a href='#' data-toggle-classes-target='#js-toggle-classes-target color-red ttu'>
   Click me!
